@@ -13,8 +13,8 @@ def clean_hotel(df):
                                         + df.arrival_date_day_of_month.astype(str), format="%Y%B%d")
     # only for describing when people cancel, never a feature
     df["cancel_days_before_arrival"] = (df.arrival_date - pd.to_datetime(df.reservation_status_date)).dt.days.where(df.is_canceled == 1)
-    df["group_size"] = df.adults + df.children + df.babies
     df[["children", "agent", "company"]] = df[["children", "agent", "company"]].astype(int)
+    df["group_size"] = df.adults + df.children + df.babies
     df[["agent", "company"]] = df[["agent", "company"]].astype(str).replace("0", "none")
 
     for reason, rule in [("no guests", lambda d: d.group_size == 0), ("negative price", lambda d: d.adr < 0)]:
