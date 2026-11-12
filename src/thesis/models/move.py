@@ -1,5 +1,7 @@
 # MOVE's current score, ported from score.js in the move-showup-score prototype
 import numpy as np
+from scipy.optimize import minimize
+from sklearn.metrics import log_loss
 
 PRIOR_MEAN, PRIOR_CONFIDENCE = 3.5, 5          # B
 HALF_LIFE, PRIOR_SHOWS, PRIOR_NO_SHOWS = 30, 2, 1  # C
@@ -28,3 +30,9 @@ def show_up_score(days_ago, attendance, ratings, weight=RELIABILITY_WEIGHT, half
 
 def label(score):
     return "Trusted" if score >= 75 else "Building trust" if score >= 50 else "Low show-up"
+
+
+def fit_prior(shows, visits, y):
+    # "tuned C": learn the prior (a, b) from data instead of fixing it at 2 and 1
+    nll = lambda t: log_loss(y, (shows + np.exp(t[0])) / (visits + np.exp(t[0]) + np.exp(t[1])))
+    return np.exp(minimize(nll, np.log([PRIOR_SHOWS, PRIOR_NO_SHOWS]), method="Nelder-Mead").x)

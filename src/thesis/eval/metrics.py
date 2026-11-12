@@ -13,7 +13,7 @@ def calibration(y, p):
 
 
 def evaluate(y, p):
-    slope, intercept = calibration(y, p)
+    slope, intercept = calibration(y, p) if np.ptp(p) > 0 else (np.nan, np.nan)  # undefined for a constant
     return {"log_loss": log_loss(y, p), "brier": brier_score_loss(y, p), "auc": roc_auc_score(y, p),
             "cal_slope": slope, "cal_intercept": intercept, "mean_p": np.mean(p), "rate": np.mean(y)}
 
