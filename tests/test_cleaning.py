@@ -34,6 +34,6 @@ def test_hotel():
     raw = pd.DataFrame([booking, booking, cancelled, {**booking, "adults": 0}, {**booking, "adr": -5.0}])
     df, log = clean_hotel(raw)
     assert not set(LEAKY) & set(df.columns)
-    assert len(df) == 2 and df.copies.sum() == 3
+    assert len(df) == 2
     assert df.set_index("is_canceled").cancel_days_before_arrival.fillna(-1).to_dict() == {0: -1, 1: 7}
     assert df.company.iloc[0] == "none" and df.agent.iloc[0] == "9"

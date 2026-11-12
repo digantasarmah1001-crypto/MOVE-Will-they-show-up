@@ -5,4 +5,4 @@ noshow,appointment before it was scheduled,5,110521
 hotel,raw rows,0,119390
 hotel,no guests,180,119210
 hotel,negative price,1,119209
-hotel,identical rows merged (see copies),31980,87229
+hotel,identical rows kept once,31980,87229

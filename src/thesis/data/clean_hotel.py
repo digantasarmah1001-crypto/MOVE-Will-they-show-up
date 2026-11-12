@@ -22,11 +22,10 @@ def clean_hotel(df):
         log.append((reason, bad.sum(), (~bad).sum()))
         df = df[~bad]
 
-    # no booking ID, so identical rows may be separate rooms of one group booking.
-    # keep one row and count the copies, to be used as a weight
+    # no booking ID, so identical rows are kept once (results are for unique bookings)
     n = len(df)
-    df = df.groupby(df.columns.tolist(), dropna=False).size().rename("copies").reset_index()
-    log.append(("identical rows merged (see copies)", n - len(df), len(df)))
+    df = df.drop_duplicates()
+    log.append(("identical rows kept once", n - len(df), len(df)))
 
     log = pd.DataFrame(log, columns=["step", "rows_removed", "rows_left"]).assign(dataset="hotel")
     return df.drop(columns=LEAKY).sort_values("arrival_date").reset_index(drop=True), log
