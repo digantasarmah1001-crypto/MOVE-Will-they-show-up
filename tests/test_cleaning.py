@@ -20,13 +20,15 @@ booking = {"hotel": "City Hotel", "is_canceled": 0, "lead_time": 10, "arrival_da
 
 def test_noshow():
     raw = pd.DataFrame([appt,
-                        {**appt, "AppointmentID": 2, "ScheduledDay": "2016-05-01T09:00:00Z", "No-show": "Yes", "Handcap": 3},
+                        {**appt, "AppointmentID": 2, "PatientId": 2.0, "ScheduledDay": "2016-05-01T09:00:00Z", "No-show": "Yes", "Handcap": 3},
                         {**appt, "AppointmentID": 3, "Age": -1},
-                        {**appt, "AppointmentID": 4, "ScheduledDay": "2016-05-05T09:00:00Z"}])
+                        {**appt, "AppointmentID": 4, "ScheduledDay": "2016-05-05T09:00:00Z"},
+                        {**appt, "AppointmentID": 5, "ScheduledDay": "2016-05-02T11:00:00Z", "No-show": "Yes"}])  # same day as 1
     df, log = clean_noshow(raw)
     df = df.set_index("appointment_id")
-    assert list(df.index) == [2, 1] and log.rows_removed.sum() == 2
-    assert df.no_show.tolist() == [1, 0] and df.lead_days.tolist() == [1, 0] and df.loc[2, "handicap"] == 1
+    assert list(df.index) == [2, 1] and log.rows_removed.sum() == 3
+    assert df.no_show.tolist() == [1, 1]  # patient 1 missed one of two appointments that day
+    assert df.lead_days.tolist() == [1, 0] and df.loc[2, "handicap"] == 1
 
 
 def test_hotel():

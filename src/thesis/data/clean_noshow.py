@@ -20,5 +20,13 @@ def clean_noshow(df):
         log.append((reason, bad.sum(), (~bad).sum()))
         df = df[~bad]
 
+    # several appointments of one patient on one day count as one visit, missed if any was missed.
+    # the other columns come from the earliest booked one
+    n = len(df)
+    df = df.sort_values(["appointment_day", "scheduled_at"])
+    df = df.groupby(["patient_id", "appointment_day"], as_index=False).agg(
+        {**{c: "first" for c in df.columns.drop(["patient_id", "appointment_day"])}, "no_show": "max", "sms_received": "max"})
+    log.append(("same-day appointments merged into one visit", n - len(df), len(df)))
+
     log = pd.DataFrame(log, columns=["step", "rows_removed", "rows_left"]).assign(dataset="noshow")
     return df.sort_values(["appointment_day", "scheduled_at"]).reset_index(drop=True), log

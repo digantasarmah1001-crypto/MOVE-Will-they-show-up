@@ -10,7 +10,7 @@ def codes(train, test):
     return pd.Categorical(train, cats).codes, pd.Categorical(test, cats).codes
 
 
-def fit(X, y, groups, draws=1000, tune=1000, seed=0):
+def fit(X, y, groups, draws=1000, tune=1000, target_accept=0.8, seed=0):
     # logit P(broken) = a + X b + one random effect per grouping (non-centred: sigma * z)
     with pm.Model(coords={"feature": X.columns}):
         a = pm.Normal("a", 0, 1.5)
@@ -21,7 +21,7 @@ def fit(X, y, groups, draws=1000, tune=1000, seed=0):
             z = pm.Normal(f"z_{g}", 0, 1, shape=int(idx.max()) + 1)
             eta = eta + sigma * z[idx]
         pm.Bernoulli("y", logit_p=eta, observed=y)
-        return pm.sample(draws, tune=tune, chains=4, nuts_sampler="nutpie", random_seed=seed, progressbar=False)
+        return pm.sample(draws, tune=tune, chains=4, nuts_sampler="nutpie", target_accept=target_accept, random_seed=seed, progressbar=False)
 
 
 def predict(idata, X, groups, n_draws=500, seed=0):

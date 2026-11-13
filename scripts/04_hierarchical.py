@@ -14,8 +14,8 @@ root = Path(__file__).resolve().parent.parent
 
 
 def noshow_design(df):
-    num = pd.DataFrame({"log_lead": np.log1p(df.lead_days), "age": df.age,
-                        "log_prior_visits": np.log1p(df.prior_visits), "log_prior_no_shows": np.log1p(df.prior_no_shows)})
+    # no past-behaviour features: the patient effect carries history (both together would be biased)
+    num = pd.DataFrame({"log_lead": np.log1p(df.lead_days), "age": df.age})
     binary = df[["scholarship", "hypertension", "diabetes", "alcoholism", "handicap", "sms_received"]].assign(
         female=(df.gender == "F").astype(int))
     weekday = pd.get_dummies(df.appointment_day.dt.day_name(), dtype=int).drop(columns="Monday")
@@ -33,12 +33,12 @@ def hotel_design(df):
     return num, binary, ["agent", "country", "market_segment", "arrival_date_month"]
 
 
-datasets = {"noshow": (noshow_data, noshow_design, "2016-05-25", "LightGBM + isotonic"),
-            "hotel": (hotel_data, hotel_design, "2016-12-31", "LightGBM")}
+datasets = {"noshow": (noshow_data, noshow_design, "2016-05-25", "LightGBM + isotonic", {}),
+            "hotel": (hotel_data, hotel_design, "2016-12-31", "LightGBM", {"target_accept": 0.95, "tune": 2000})}
 effects, diagnostics, rows = [], [], []
 
 for name in sys.argv[1:] or datasets:
-    load, design, split_date, best = datasets[name]
+    load, design, split_date, best, sampler = datasets[name]
     df, _, y_show, _, _, people, strata, date_col = load()
     tr, te = (d.index for d in split(df, date_col, split_date))
     num, binary, group_cols = design(df)
@@ -48,7 +48,7 @@ for name in sys.argv[1:] or datasets:
     for g in group_cols:
         g_tr[g], g_te[g] = codes(df.loc[tr, g], df.loc[te, g])
 
-    idata = fit(X.loc[tr], 1 - y_show[tr].values, g_tr)
+    idata = fit(X.loc[tr], 1 - y_show[tr].values, g_tr, **sampler)
     idata.to_netcdf(root / f"results/models/hier_{name}.nc")
 
     summ = az.summary(idata, var_names=["a", "b"] + [f"sigma_{g}" for g in group_cols], ci_prob=0.9)
