@@ -12,10 +12,10 @@ def learned_score(days_ago, attendance, a, b, half_life=30):
     return beta(a + shows, b + w.sum() - shows)
 
 
-def scorers(a, b):
+def scorers(a, b, half_life=30):
     # each takes a history [(day, attendance), ...] and the current day, and returns P(show)
-    return {"MOVE C": lambda h, day: reliability([day - d for d, _ in h], [s for _, s in h]),
-            "learned": lambda h, day: learned_score([day - d for d, _ in h], [s for _, s in h], a, b).mean()}
+    return {"MOVE C": lambda h, day: reliability([day - d for d, _ in h], [s for _, s in h], half_life),
+            "learned": lambda h, day: learned_score([day - d for d, _ in h], [s for _, s in h], a, b, half_life).mean()}
 
 
 def whitewash(histories, true_p, day, a, b):
@@ -28,12 +28,12 @@ def whitewash(histories, true_p, day, a, b):
     return pd.DataFrame(rows)
 
 
-def recovery(a, b, target, gap=3, max_plans=60):
+def recovery(a, b, target, half_life=30, gap=3, max_plans=60):
     # a flaky user (2 shows out of 10 plans in the last month) now shows up every `gap` days.
     # how many plans until their score reaches the target?
     start = [(d, int(i < 2)) for i, d in enumerate(range(-30, 0, 3))]
     out = {}
-    for name, score in scorers(a, b).items():
+    for name, score in scorers(a, b, half_life).items():
         h, day = list(start), 0
         for n in range(1, max_plans + 1):
             h.append((day, 1))

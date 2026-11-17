@@ -4,6 +4,10 @@ import numpy as np
 import pandas as pd
 from scipy.special import expit
 
+from sklearn.metrics import log_loss
+
+from thesis.data.features import add_history, split
+from thesis.models.move import fit_prior
 from thesis.sim.gaming import personas, recovery, whitewash
 from thesis.sim.platform import (beta_scorer, invite_capacity, invite_fixed_ratio, invite_optimised, move_scorer,
                                  simulate)
@@ -79,8 +83,19 @@ gaming.to_csv(tables / "sim_whitewash.csv", index=False)
 print(gaming.round(3).to_string(index=False))
 
 # 4. recovery and 5. personas
-rec = pd.DataFrame([{"target": t, **recovery(a, b, target=t)} for t in [0.7, 0.75, 0.8]])
+# the data can't tell half-lives apart (6 week window), so the half-life is a product choice: show what it does
+rec = pd.DataFrame([{"half_life": hl, "target": t, **recovery(a, b, target=t, half_life=hl)}
+                    for hl in [7, 14, 30] for t in [0.7, 0.75, 0.8]])
 rec.to_csv(tables / "sim_recovery.csv", index=False)
+# and what each half-life costs in prediction on the real no-show data (tuned MOVE C, test period)
+raw = pd.read_parquet(root / "data/processed/noshow.parquet")
+cost = []
+for hl in [7, 14, 30]:
+    tr, te = split(add_history(raw, half_life=hl))
+    pa, pb = fit_prior(tr.w_shows.values, tr.w_visits.values, 1 - tr.no_show.values)
+    cost.append({"half_life": hl, "test log loss": log_loss(1 - te.no_show, (te.w_shows + pa) / (te.w_visits + pa + pb))})
+pd.DataFrame(cost).to_csv(tables / "half_life_cost.csv", index=False)
+print(pd.DataFrame(cost).round(4).to_string(index=False))
 per = personas(a, b)
 per.to_csv(tables / "sim_personas.csv", index=False)
 print(rec.to_string(index=False))
