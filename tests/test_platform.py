@@ -4,7 +4,7 @@ from thesis.sim.platform import beta_scorer, invite_capacity, move_scorer, simul
 
 
 def test_reliable_users_always_meet():
-    plans, _, _ = simulate(move_scorer, invite_capacity, true_p=np.ones(50), days=3)
+    plans = simulate(move_scorer, invite_capacity, true_p=np.ones(50), days=3)[0]
     assert plans.happened.all() and (plans.overflow == 0).all() and (plans.came == 6).all()
 
 
