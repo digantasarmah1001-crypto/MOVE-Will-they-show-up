@@ -37,7 +37,7 @@ def hotel_design(df):
 
 
 datasets = {"noshow": (noshow_data, noshow_design, "2016-05-25", "LightGBM + isotonic", {"draws": 2000}),
-            "hotel": (hotel_data, hotel_design, "2016-12-31", "LightGBM", {"target_accept": 0.95, "tune": 2000})}
+            "hotel": (hotel_data, hotel_design, "2016-12-31", "LightGBM", {"draws": 2000, "target_accept": 0.95, "tune": 2000})}
 tables = root / "results/tables"
 
 for name in sys.argv[1:] or datasets:
