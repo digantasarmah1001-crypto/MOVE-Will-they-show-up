@@ -22,6 +22,7 @@ bayes:
 
 simulate:
 	$(PY) scripts/06_simulate.py
+	$(PY) scripts/07_matching.py
 
 test:
 	$(PY) -m pytest -q

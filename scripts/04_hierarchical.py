@@ -73,6 +73,7 @@ for name in sys.argv[1:] or datasets:
     preds["hierarchical Bayes"] = 1 - p_broken.mean(0)
     if name == "noshow":  # also use each patient's earlier visits in the test period, like the other models do
         preds["hierarchical Bayes, online"] = 1 - online(p_broken, 1 - y, people[te].values, df.loc[te, date_col].values)
+    preds.to_parquet(root / f"data/processed/preds_{name}_all.parquet")
     for model, p in preds.items():
         p = p.values
         vs_move = bootstrap_diff(y, p, preds["MOVE C"].values, people[te].values)
