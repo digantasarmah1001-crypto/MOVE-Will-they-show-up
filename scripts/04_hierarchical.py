@@ -4,11 +4,12 @@ from pathlib import Path
 import arviz as az
 import numpy as np
 import pandas as pd
+import xarray as xr
 
 from thesis.data.datasets import hotel_data, noshow_data
 from thesis.data.features import split
 from thesis.eval.metrics import bootstrap_diff, evaluate
-from thesis.models.hierarchical import codes, fit, predict
+from thesis.models.hierarchical import codes, fit, online, predict, thin
 
 root = Path(__file__).resolve().parent.parent
 
@@ -51,20 +52,27 @@ for name in sys.argv[1:] or datasets:
     for g in group_cols:
         g_tr[g], g_te[g] = codes(df.loc[tr, g], df.loc[te, g])
 
-    idata = fit(X.loc[tr], 1 - y_show[tr].values, g_tr, **sampler)
-    idata.to_netcdf(root / f"results/models/hier_{name}.nc")
-
-    summ = az.summary(idata, var_names=["a", "b"] + [f"sigma_{g}" for g in group_cols], ci_prob=0.9)
-    summ.to_csv(tables / f"hier_effects_{name}.csv")
-    z = az.summary(idata, var_names=[f"z_{g}" for g in group_cols], kind="diagnostics")
-    diag = pd.DataFrame([{"divergences": int(idata.sample_stats.diverging.sum()),
-                          "max_r_hat": max(summ.r_hat.max(), z.r_hat.max()),
-                          "min_ess_bulk": min(summ.ess_bulk.min(), z.ess_bulk.min())}])
-    diag.to_csv(tables / f"hier_diagnostics_{name}.csv", index=False)
+    # a saved model is reused, delete results/models/hier_<name>.nc to refit
+    path = root / f"results/models/hier_{name}.nc"
+    if path.exists():
+        post = xr.open_dataset(path)
+    else:
+        idata = fit(X.loc[tr], 1 - y_show[tr].values, g_tr, **sampler)
+        summ = az.summary(idata, var_names=["a", "b"] + [f"sigma_{g}" for g in group_cols], ci_prob=0.9)
+        summ.to_csv(tables / f"hier_effects_{name}.csv")
+        z = az.summary(idata, var_names=[f"z_{g}" for g in group_cols], kind="diagnostics")
+        pd.DataFrame([{"divergences": int(idata.sample_stats.diverging.sum()),
+                       "max_r_hat": max(summ.r_hat.max(), z.r_hat.max()),
+                       "min_ess_bulk": min(summ.ess_bulk.min(), z.ess_bulk.min())}]).to_csv(tables / f"hier_diagnostics_{name}.csv", index=False)
+        post = thin(idata)
+        post.to_netcdf(path)
 
     preds = pd.read_parquet(root / f"data/processed/preds_{name}.parquet")
-    preds["hierarchical Bayes"] = 1 - predict(idata, X.loc[te], g_te)
     y = y_show[te].values
+    p_broken = predict(post, X.loc[te], g_te)
+    preds["hierarchical Bayes"] = 1 - p_broken.mean(0)
+    if name == "noshow":  # also use each patient's earlier visits in the test period, like the other models do
+        preds["hierarchical Bayes, online"] = 1 - online(p_broken, 1 - y, people[te].values, df.loc[te, date_col].values)
     for model, p in preds.items():
         p = p.values
         vs_move = bootstrap_diff(y, p, preds["MOVE C"].values, people[te].values)
@@ -78,7 +86,6 @@ for name in sys.argv[1:] or datasets:
 
     out = pd.DataFrame(rows)
     out.to_csv(tables / f"rq2_comparison_{name}.csv", index=False)
-    print(diag.to_string(index=False))
-    print(summ.round(3).to_string())
+    print(pd.read_csv(tables / f"hier_diagnostics_{name}.csv").to_string(index=False))
     print(out[out.stratum == "all"].drop(columns=["dataset", "stratum"]).round(3).to_string(index=False))
     print(out.pivot_table(index="model", columns="stratum", values="log_loss", sort=False).round(3).to_string())
