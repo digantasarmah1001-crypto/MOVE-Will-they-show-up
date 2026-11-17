@@ -31,3 +31,26 @@ def hotel_data():
     strata = pd.cut(prev, [-1, 0, 2, np.inf], labels=["0", "1-2", "3+"])
     df["date"] = df.arrival_date
     return df, X, 1 - df.is_canceled, df.previous_bookings_not_canceled, prev, df.index, strata, "date"
+
+
+# features for the Bayesian models: numeric ones (scaled later), 0/1 ones, and the grouping columns
+def noshow_design(df):
+    # no past-behaviour features: the patient effect carries history (both together would be biased)
+    num = pd.DataFrame({"log_lead": np.log1p(df.lead_days), "age": df.age})
+    binary = df[["scholarship", "hypertension", "diabetes", "alcoholism", "handicap", "sms_received"]].assign(
+        female=(df.gender == "F").astype(int), same_day=(df.lead_days == 0).astype(int))
+    weekday = pd.get_dummies(df.appointment_day.dt.day_name(), dtype=int).drop(columns="Monday")
+    return num, pd.concat([binary, weekday], axis=1), ["patient_id", "neighbourhood"]
+
+
+def hotel_design(df):
+    num = pd.DataFrame({"log_lead": np.log1p(df.lead_time), "group_size": df.group_size, "adr": df.adr,
+                        "weekend_nights": df.stays_in_weekend_nights, "week_nights": df.stays_in_week_nights,
+                        "log_prev_cancellations": np.log1p(df.previous_cancellations),
+                        "log_prev_kept": np.log1p(df.previous_bookings_not_canceled)})
+    binary = pd.concat([df[["is_repeated_guest"]], (df.hotel == "Resort Hotel").astype(int).rename("resort"),
+                        pd.get_dummies(df.deposit_type, dtype=int).drop(columns="No Deposit"),
+                        pd.get_dummies(df.customer_type, dtype=int).drop(columns="Transient"),
+                        # only 8 segments, too few to estimate a spread, so a normal feature instead of a group
+                        pd.get_dummies(df.market_segment, dtype=int).drop(columns="Online TA")], axis=1)
+    return num, binary, ["agent", "country", "arrival_date_month"]
