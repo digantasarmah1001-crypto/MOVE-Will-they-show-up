@@ -6,6 +6,7 @@ import pandas as pd
 from thesis.data.features import add_history
 
 root = Path(__file__).resolve().parents[3]
+STRATA = [-1, 0, 2, np.inf], ["0", "1-2", "3+"]
 
 
 def noshow_data():
@@ -15,9 +16,8 @@ def noshow_data():
         log_lead=np.log1p(df.lead_days), same_day=(df.lead_days == 0).astype(int), female=(df.gender == "F").astype(int),
         log_days_since_last=np.log1p(df.days_since_last.fillna(0)),
         weekday=df.appointment_day.dt.day_name().astype("category"), neighbourhood=df.neighbourhood.astype("category"))
-    strata = pd.cut(df.prior_visits, [-1, 0, 2, np.inf], labels=["0", "1-2", "3+"])
-    # MOVE: weighted shows and visits, no late cancels in this data
-    return df, X, 1 - df.no_show, df.w_shows, df.w_visits, df.patient_id, strata, "appointment_day"
+    return {"df": df, "X": X, "y": 1 - df.no_show, "shows": df.w_shows, "visits": df.w_visits,
+            "people": df.patient_id, "strata": pd.cut(df.prior_visits, *STRATA), "date": "appointment_day"}
 
 
 def hotel_data():
@@ -28,14 +28,12 @@ def hotel_data():
             "is_repeated_guest", "previous_cancellations", "previous_bookings_not_canceled", "adr"]].assign(
         log_lead=np.log1p(df.lead_time), **{c: df[c].astype("category") for c in cats})
     prev = df.previous_cancellations + df.previous_bookings_not_canceled
-    strata = pd.cut(prev, [-1, 0, 2, np.inf], labels=["0", "1-2", "3+"])
-    df["date"] = df.arrival_date
-    return df, X, 1 - df.is_canceled, df.previous_bookings_not_canceled, prev, df.index, strata, "date"
+    return {"df": df, "X": X, "y": 1 - df.is_canceled, "shows": df.previous_bookings_not_canceled, "visits": prev,
+            "people": pd.Series(df.index), "strata": pd.cut(prev, *STRATA), "date": "arrival_date"}
 
 
-# features for the Bayesian models: numeric ones (scaled later), 0/1 ones, and the grouping columns
 def noshow_design(df):
-    # no past-behaviour features: the patient effect carries history (both together would be biased)
+    # no past behaviour here: the patient effect carries it, and both together would be biased
     num = pd.DataFrame({"log_lead": np.log1p(df.lead_days), "age": df.age})
     binary = df[["scholarship", "hypertension", "diabetes", "alcoholism", "handicap", "sms_received"]].assign(
         female=(df.gender == "F").astype(int), same_day=(df.lead_days == 0).astype(int))
@@ -51,6 +49,5 @@ def hotel_design(df):
     binary = pd.concat([df[["is_repeated_guest"]], (df.hotel == "Resort Hotel").astype(int).rename("resort"),
                         pd.get_dummies(df.deposit_type, dtype=int).drop(columns="No Deposit"),
                         pd.get_dummies(df.customer_type, dtype=int).drop(columns="Transient"),
-                        # only 8 segments, too few to estimate a spread, so a normal feature instead of a group
                         pd.get_dummies(df.market_segment, dtype=int).drop(columns="Online TA")], axis=1)
     return num, binary, ["agent", "country", "arrival_date_month"]

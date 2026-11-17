@@ -21,7 +21,6 @@ def test_flaky_people_need_more_invites():
 
 
 def test_uncertainty_is_averaged():
-    # two equally likely worlds: everyone shows or nobody does. A plug-in p of 0.5 gives a different answer
     draws = np.array([[1.0] * 4, [0.0] * 4])
     assert plan_value(draws, 4, 2) == (4 - 2) / 2
     assert plan_value(np.full(4, 0.5), 4, 2) != plan_value(draws, 4, 2)

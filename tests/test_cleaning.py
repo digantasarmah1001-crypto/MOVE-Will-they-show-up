@@ -1,7 +1,6 @@
 import pandas as pd
 
-from thesis.data.clean_hotel import LEAKY, clean_hotel
-from thesis.data.clean_noshow import clean_noshow
+from thesis.data.clean import LEAKY, clean_hotel, clean_noshow
 
 appt = {"PatientId": 1.0, "AppointmentID": 1, "Gender": "F", "ScheduledDay": "2016-05-02T10:00:00Z",
         "AppointmentDay": "2016-05-02T00:00:00Z", "Age": 30, "Neighbourhood": "X", "Scholarship": 0,
@@ -19,15 +18,15 @@ booking = {"hotel": "City Hotel", "is_canceled": 0, "lead_time": 10, "arrival_da
 
 
 def test_noshow():
-    raw = pd.DataFrame([appt,
-                        {**appt, "AppointmentID": 2, "PatientId": 2.0, "ScheduledDay": "2016-05-01T09:00:00Z", "No-show": "Yes", "Handcap": 3},
-                        {**appt, "AppointmentID": 3, "Age": -1},
+    other_patient = {**appt, "AppointmentID": 2, "PatientId": 2.0, "ScheduledDay": "2016-05-01T09:00:00Z",
+                     "No-show": "Yes", "Handcap": 3}
+    raw = pd.DataFrame([appt, other_patient, {**appt, "AppointmentID": 3, "Age": -1},
                         {**appt, "AppointmentID": 4, "ScheduledDay": "2016-05-05T09:00:00Z"},
-                        {**appt, "AppointmentID": 5, "ScheduledDay": "2016-05-02T11:00:00Z", "No-show": "Yes"}])  # same day as 1
+                        {**appt, "AppointmentID": 5, "ScheduledDay": "2016-05-02T11:00:00Z", "No-show": "Yes"}])
     df, log = clean_noshow(raw)
     df = df.set_index("appointment_id")
     assert list(df.index) == [2, 1] and log.rows_removed.sum() == 3
-    assert df.no_show.tolist() == [1, 1]  # patient 1 missed one of two appointments that day
+    assert df.no_show.tolist() == [1, 1]
     assert df.lead_days.tolist() == [1, 0] and df.loc[2, "handicap"] == 1
 
 

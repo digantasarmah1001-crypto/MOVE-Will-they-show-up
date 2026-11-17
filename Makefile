@@ -1,7 +1,6 @@
 PY = .venv/bin/python
 
-# everything from raw data to the final tables. The Bayesian fits take about an hour;
-# a saved fit in results/models is reused, delete it to refit
+# saved Bayesian fits in results/models are reused, delete them to refit (about an hour)
 all: data baselines bayes simulate figures
 
 setup:
@@ -19,11 +18,11 @@ baselines:
 bayes:
 	$(PY) scripts/04_hierarchical.py
 	$(PY) scripts/05_rq1.py
+	$(PY) scripts/08_robustness.py
 
 simulate:
 	$(PY) scripts/06_simulate.py
 	$(PY) scripts/07_matching.py
-	$(PY) scripts/08_robustness.py
 
 figures:
 	$(PY) scripts/09_figures.py

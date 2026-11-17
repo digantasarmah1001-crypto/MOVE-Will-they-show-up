@@ -45,5 +45,5 @@ def test_no_shows_and_late_cancels():
 
 def test_recency_and_labels():
     assert score(shows + [(90, "no_show", None)]) > score(shows + [(0, "no_show", None)])
-    assert abs(reliability([0, 30], [1, 0], a=0, b=0) - 1 / 1.5) < 1e-12  # a 30 day old event counts half
+    assert abs(reliability([0, 30], [1, 0], a=0, b=0) - 1 / 1.5) < 1e-12
     assert [label(s) for s in (75, 74, 50, 49)] == ["Trusted", "Building trust", "Building trust", "Low show-up"]

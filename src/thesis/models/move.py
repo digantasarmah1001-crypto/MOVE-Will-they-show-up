@@ -1,10 +1,10 @@
-# MOVE's current score, ported from score.js in the move-showup-score prototype
 import numpy as np
 from scipy.optimize import minimize
 from sklearn.metrics import log_loss
 
-PRIOR_MEAN, PRIOR_CONFIDENCE = 3.5, 5          # B
-HALF_LIFE, PRIOR_SHOWS, PRIOR_NO_SHOWS = 30, 2, 1  # C
+# MOVE's current score, ported from score.js in the move-showup-score prototype
+PRIOR_MEAN, PRIOR_CONFIDENCE = 3.5, 5
+HALF_LIFE, PRIOR_SHOWS, PRIOR_NO_SHOWS = 30, 2, 1
 RELIABILITY_WEIGHT = 0.7
 ATTENDANCE = {"showed": 1, "late": 0.5, "no_show": 0}
 
@@ -22,10 +22,11 @@ def reliability(days_ago, attendance, half_life=HALF_LIFE, a=PRIOR_SHOWS, b=PRIO
     return (w @ np.asarray(attendance, dtype=float) + a) / (w.sum() + a + b)
 
 
-def show_up_score(days_ago, attendance, ratings, weight=RELIABILITY_WEIGHT, half_life=HALF_LIFE, prior_confidence=PRIOR_CONFIDENCE):
+def show_up_score(days_ago, attendance, ratings, weight=RELIABILITY_WEIGHT, half_life=HALF_LIFE,
+                  prior_confidence=PRIOR_CONFIDENCE):
     rating_part = (bayesian_average(ratings, prior_confidence) - 1) / 4
     x = 100 * (weight * reliability(days_ago, attendance, half_life) + (1 - weight) * rating_part)
-    return int(np.floor(x + 0.5))  # same as JS Math.round, python round() would round 64.5 down
+    return int(np.floor(x + 0.5))  # rounds like JS Math.round, python round() rounds 64.5 down
 
 
 def label(score):
@@ -33,6 +34,7 @@ def label(score):
 
 
 def fit_prior(shows, visits, y):
-    # "tuned C": learn the prior (a, b) from data instead of fixing it at 2 and 1
-    nll = lambda t: log_loss(y, (shows + np.exp(t[0])) / (visits + np.exp(t[0]) + np.exp(t[1])))
-    return np.exp(minimize(nll, np.log([PRIOR_SHOWS, PRIOR_NO_SHOWS]), method="Nelder-Mead").x)
+    def loss(t):
+        a, b = np.exp(t)
+        return log_loss(y, (shows + a) / (visits + a + b))
+    return np.exp(minimize(loss, np.log([PRIOR_SHOWS, PRIOR_NO_SHOWS]), method="Nelder-Mead").x)

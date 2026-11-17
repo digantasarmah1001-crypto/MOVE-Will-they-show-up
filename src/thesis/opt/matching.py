@@ -1,11 +1,11 @@
 import numpy as np
 from ortools.linear_solver import pywraplp
 
+from thesis.opt.overbooking import value
+
 
 def match_ilp(p, interest, capacity, min_size, max_invites, due=None, fair_bonus=0.1):
-    # p: show chance per user, interest: (users, plans) 0/1. Returns invited[user] = plan or -1.
-    # Maximise plans expected to happen first, then expected attendance (plus a bonus for "due" users).
-    # A plan only opens if its expected attendance is between min_size + 0.5 and capacity
+    # first open as many plans as possible, then maximise expected attendance
     due = np.zeros(len(p)) if due is None else due
     s = pywraplp.Solver.CreateSolver("SCIP")
     x = {(i, j): s.BoolVar(f"x_{i}_{j}") for i, j in zip(*np.nonzero(interest))}
@@ -18,7 +18,7 @@ def match_ilp(p, interest, capacity, min_size, max_invites, due=None, fair_bonus
         s.Add(sum(v for _, v in invited) <= max_invites * open_)
         s.Add(sum(p[i] * v for i, v in invited) >= (min_size + 0.5) * open_)
         s.Add(sum(p[i] * v for i, v in invited) <= capacity)
-    s.SetTimeLimit(5000)  # 5 seconds, a near-optimal answer is fine
+    s.SetTimeLimit(5000)
     s.Solve()
     out = np.full(len(p), -1)
     for (i, j), v in x.items():
@@ -28,8 +28,7 @@ def match_ilp(p, interest, capacity, min_size, max_invites, due=None, fair_bonus
 
 
 def match_greedy(p, interest, capacity, min_size, max_invites, due=None, fair_bonus=0.1):
-    # each plan in turn invites its most reliable interested users who are still free,
-    # until expected attendance reaches capacity
+    # each plan in turn takes its best free users until expected attendance reaches capacity
     due = np.zeros(len(p)) if due is None else due
     out = np.full(len(p), -1)
     for j in range(interest.shape[1]):
@@ -61,5 +60,5 @@ def simulate_matching(scorer, match, n_users=500, days=60, available=120, plans=
         for j in range(plans):
             k = (came & (plan_of == j)).sum()
             rows.append({"day": day, "invited": (plan_of == j).sum(), "came": k, "happened": k >= min_size,
-                         "value": -2.0 if k < min_size else min(k, capacity) - max(k - capacity, 0)})
+                         "value": float(value(k, capacity, min_size))})
     return rows
