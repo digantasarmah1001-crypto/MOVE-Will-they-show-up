@@ -18,7 +18,7 @@ def noshow_design(df):
     # no past-behaviour features: the patient effect carries history (both together would be biased)
     num = pd.DataFrame({"log_lead": np.log1p(df.lead_days), "age": df.age})
     binary = df[["scholarship", "hypertension", "diabetes", "alcoholism", "handicap", "sms_received"]].assign(
-        female=(df.gender == "F").astype(int))
+        female=(df.gender == "F").astype(int), same_day=(df.lead_days == 0).astype(int))
     weekday = pd.get_dummies(df.appointment_day.dt.day_name(), dtype=int).drop(columns="Monday")
     return num, pd.concat([binary, weekday], axis=1), ["patient_id", "neighbourhood"]
 

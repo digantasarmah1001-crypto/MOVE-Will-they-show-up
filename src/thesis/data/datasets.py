@@ -12,7 +12,7 @@ def noshow_data():
     df = add_history(pd.read_parquet(root / "data/processed/noshow.parquet"))
     X = df[["age", "scholarship", "hypertension", "diabetes", "alcoholism", "handicap", "sms_received",
             "prior_visits", "prior_no_shows", "w_visits", "w_shows"]].assign(
-        log_lead=np.log1p(df.lead_days), female=(df.gender == "F").astype(int),
+        log_lead=np.log1p(df.lead_days), same_day=(df.lead_days == 0).astype(int), female=(df.gender == "F").astype(int),
         log_days_since_last=np.log1p(df.days_since_last.fillna(0)),
         weekday=df.appointment_day.dt.day_name().astype("category"), neighbourhood=df.neighbourhood.astype("category"))
     strata = pd.cut(df.prior_visits, [-1, 0, 2, np.inf], labels=["0", "1-2", "3+"])

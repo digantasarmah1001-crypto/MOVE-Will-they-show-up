@@ -19,7 +19,7 @@ num = pd.DataFrame({"log_lead": np.log1p(df.lead_days), "age": df.age,
                     "log_prior_no_shows": np.log1p(df.prior_no_shows),
                     "log_prior_shows": np.log1p(df.prior_visits - df.prior_no_shows)})
 binary = df[["scholarship", "hypertension", "diabetes", "alcoholism", "handicap", "sms_received"]].assign(
-    female=(df.gender == "F").astype(int))
+    female=(df.gender == "F").astype(int), same_day=(df.lead_days == 0).astype(int))
 X = pd.concat([(num - num.loc[tr].mean()) / num.loc[tr].std(), binary], axis=1)
 idata = fit(X.loc[tr], df.no_show[tr].values, {"neighbourhood": codes(df.neighbourhood[tr], df.neighbourhood[tr])[0]})
 az.summary(idata, var_names=["a", "b", "sigma_neighbourhood"], ci_prob=0.9).to_csv(tables / "rq1_noshow_effects.csv")
@@ -28,7 +28,8 @@ az.summary(idata, var_names=["a", "b", "sigma_neighbourhood"], ci_prob=0.9).to_c
 noshow = pd.read_csv(tables / "rq1_noshow_effects.csv", index_col=0)
 hotel = pd.read_csv(tables / "hier_effects_hotel.csv", index_col=0)
 drivers = {"lead time": ("log_lead", "log_lead"), "past broken commitments": ("log_prior_no_shows", "log_prev_cancellations"),
-           "past kept commitments": ("log_prior_shows", "log_prev_kept"), "reminder (SMS)": ("sms_received", None),
+           "past kept commitments": ("log_prior_shows", "log_prev_kept"), "same-day commitment": ("same_day", None),
+           "reminder (SMS)": ("sms_received", None),
            "non-refundable deposit": (None, "Non Refund"), "price per night": (None, "adr"), "group size": (None, "group_size")}
 
 
