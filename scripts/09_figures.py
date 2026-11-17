@@ -21,6 +21,7 @@ plt.rcParams.update({"figure.facecolor": SURFACE, "axes.facecolor": SURFACE, "ax
 data = {"noshow": noshow_data(), "hotel": hotel_data()}
 test = {name: split(d["df"], d["date"], date)[1].index for (name, d), date in zip(data.items(), ["2016-05-25", "2016-12-31"])}
 preds = {name: pd.read_parquet(root / f"data/processed/preds_{name}_all.parquet") for name in data}
+titles = {"noshow": "no-show data", "hotel": "hotel data"}
 
 
 def save(fig, name):
@@ -34,7 +35,7 @@ fig, ax = plt.subplots(figsize=(6, 3.8))
 drivers = pd.read_csv(tables / "drivers.csv").query("driver == 'lead'")
 for name, color, marker in [("noshow", BLUE, "o"), ("hotel", ORANGE, "s")]:
     d = drivers[drivers.dataset == name]
-    ax.plot(d.level, d.rate, color=color, marker=marker, label=f"{name} data")
+    ax.plot(d.level, d.rate, color=color, marker=marker, label=titles[name])
 ax.set(xlabel="lead time (days)", ylabel="share of broken commitments", ylim=(0, None))
 ax.legend(loc="upper left")
 save(fig, "lead_time")
@@ -49,7 +50,7 @@ for ax, name in zip(axes, data):
         observed, predicted = calibration_curve(y, preds[name][col], n_bins=10, strategy="quantile")
         ax.plot(predicted, observed, color=color, marker=marker, label=model)
     ax.plot([0, 1], [0, 1], color=MUTED, linewidth=1, linestyle="--", label="perfect calibration")
-    ax.set(title=f"{name} data", xlabel="predicted chance of showing up", ylabel="observed share who showed up",
+    ax.set(title=titles[name], xlabel="predicted chance of showing up", ylabel="observed share who showed up",
            xlim=(0.3, 1), ylim=(0.3, 1))
 axes[0].legend(loc="upper left")
 save(fig, "reliability")
