@@ -49,31 +49,34 @@ drivers = [("same-day commitment", "same_day", None), ("lead time (per 1 sd)", "
            ("past broken commitments", "log_prior_no_shows", "log_prev_cancellations"),
            ("past kept commitments", "log_prior_shows", "log_prev_kept"), ("SMS reminder", "sms_received", None),
            ("group size", None, "group_size"), ("price per night", None, "adr")]
-fig, ax = plt.subplots(figsize=(7, 4.2))
+fig, ax = plt.subplots(figsize=(7, 4.4))
 for k, (table, label, color, marker, shift) in enumerate([(noshow, "no-show data", BLUE, "o", -0.12), (hotel, "hotel data", ORANGE, "s", 0.12)]):
-    for row, (_, *features) in enumerate(drivers):
-        f = features[k]
-        if f:
-            r = table.loc[f"b[{f}]"]
-            ax.plot(np.exp([r.eti90_lb, r.eti90_ub]), [row + shift] * 2, color=color)
-            ax.plot(np.exp(r["mean"]), row + shift, marker=marker, color=color, label=label if row < 2 else None)
+    rows = [(row, table.loc[f"b[{f[k]}]"]) for row, (_, *f) in enumerate(drivers) if f[k]]
+    for row, r in rows:
+        ax.plot(np.exp([r.eti90_lb, r.eti90_ub]), [row + shift] * 2, color=color)
+    ax.plot([np.exp(r["mean"]) for _, r in rows], [row + shift for row, _ in rows], marker=marker, color=color,
+            linestyle="none", label=label)
 ax.axvline(1, color=MUTED, linewidth=1, linestyle="--")
 ax.set(xscale="log", yticks=range(len(drivers)), yticklabels=[d[0] for d in drivers],
        xlabel="odds ratio of breaking the commitment (log scale, 1 = no effect)")
+ax.set_xticks([0.2, 0.5, 1, 2], ["0.2", "0.5", "1", "2"])
+ax.minorticks_off()
 ax.invert_yaxis()
-ax.legend(loc="lower right")
+ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1), ncol=2)
 save(fig, "drivers")
 
 # 3. invite rules in the simulator
 pol = pd.read_csv(tables / "sim_policies.csv")
+# a dot chart, not bars: the differences are small and bars would have to start at 0
 fig, ax = plt.subplots(figsize=(6.5, 3.8))
 rules = pol.rule.unique()
-for k, (scorer, color) in enumerate([("MOVE C", ORANGE), ("learned", BLUE)]):
+for k, (scorer, color, marker) in enumerate([("MOVE C", ORANGE, "s"), ("learned", BLUE, "o")]):
     vals = pol.set_index(["scorer", "rule"]).loc[scorer, "value per plan"].reindex(rules)
-    bars = ax.bar(np.arange(len(rules)) + (k - 0.5) * 0.38, vals, width=0.36, color=color, label=f"{scorer} score",
-                  edgecolor=SURFACE, linewidth=2)
-    ax.bar_label(bars, fmt="%.2f", color=INK, fontsize=8)
-ax.set(xticks=range(len(rules)), xticklabels=rules, ylabel="value per plan", ylim=(4, 5.4))
+    x = np.arange(len(rules)) + (k - 0.5) * 0.2
+    ax.plot(x, vals, marker=marker, color=color, linestyle="none", markersize=8, label=f"{scorer} score")
+    for xi, v in zip(x, vals):
+        ax.annotate(f"{v:.2f}", (xi, v), textcoords="offset points", xytext=(0, 8), ha="center", fontsize=8, color=INK)
+ax.set(xticks=range(len(rules)), xticklabels=rules, ylabel="value per plan", xlim=(-0.5, len(rules) - 0.5))
 ax.legend(loc="upper left")
 save(fig, "invite_rules")
 
