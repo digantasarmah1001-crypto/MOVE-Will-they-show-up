@@ -18,7 +18,7 @@ def match_ilp(p, interest, capacity, min_size, max_invites, due=None, fair_bonus
         s.Add(sum(v for _, v in invited) <= max_invites * open_)
         s.Add(sum(p[i] * v for i, v in invited) >= (min_size + 0.5) * open_)
         s.Add(sum(p[i] * v for i, v in invited) <= capacity)
-    s.SetTimeLimit(5000)
+    s.SetSolverSpecificParametersAsString("limits/nodes = 500")  # a search limit, not a time limit, so results repeat
     s.Solve()
     out = np.full(len(p), -1)
     for (i, j), v in x.items():
