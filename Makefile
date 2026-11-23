@@ -28,6 +28,7 @@ clinic:
 
 figures:
 	$(PY) scripts/11_figures.py
+	$(PY) scripts/12_latex_tables.py
 
 test:
 	$(PY) -m pytest -q

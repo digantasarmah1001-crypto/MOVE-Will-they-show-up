@@ -48,7 +48,7 @@ for ax, name in zip(axes, data):
     for model, (color, marker) in models.items():
         col = "hierarchical Bayes, online" if model == "hierarchical Bayes" and name == "noshow" else model
         observed, predicted = calibration_curve(y, preds[name][col], n_bins=10, strategy="quantile")
-        ax.plot(predicted, observed, color=color, marker=marker, label=model)
+        ax.plot(predicted, observed, color=color, marker=marker, label=model.replace("MOVE C", "hand-made score"))
     ax.plot([0, 1], [0, 1], color=MUTED, linewidth=1, linestyle="--", label="perfect calibration")
     ax.set(title=titles[name], xlabel="predicted chance of showing up", ylabel="observed share who showed up",
            xlim=(0.3, 1), ylim=(0.3, 1))
@@ -84,7 +84,7 @@ fig, ax = plt.subplots(figsize=(6.5, 4))
 for strategy, color, style in [("remind everyone", MUTED, "--"), ("MOVE C", ORANGE, "-"), ("logistic regression", AQUA, "-"),
                                ("hierarchical Bayes, online", BLUE, "-")]:
     d = dc[(dc.strategy == strategy) & (dc.version.fillna("").isin(["", "level updated"]))]
-    ax.plot(d.threshold, d["net benefit"], color=color, linestyle=style, label=strategy.replace(", online", ""))
+    ax.plot(d.threshold, d["net benefit"], color=color, linestyle=style, label=strategy.replace(", online", "").replace("MOVE C", "hand-made score"))
 ax.axhline(0, color=INK, linewidth=1, label="remind no one")
 ax.set(xlabel="risk threshold for a reminder", ylabel="net benefit (no-shows reached per patient)", ylim=(-0.02, 0.2))
 ax.legend(loc="upper right")

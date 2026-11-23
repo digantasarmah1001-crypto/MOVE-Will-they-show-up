@@ -1,0 +1,14 @@
+\begin{tabular}{lrrrrrr}
+\toprule
+Model & Log loss & Brier & AUC & Cal. slope & Cal. intercept & vs hand-made (95\% CI) \\
+\midrule
+Average rate & 0.490 & 0.156 & 0.500 &  &  & -0.038 to -0.032 \\
+Hand-made score & 0.525 & 0.170 & 0.536 & 0.528 & 1.017 &  \\
+Hand-made score, learned prior & 0.486 & 0.154 & 0.543 & 1.215 & -0.148 & -0.042 to -0.037 \\
+Logistic regression & 0.438 & 0.141 & 0.720 & 0.948 & 0.218 & -0.091 to -0.084 \\
+LightGBM & 0.440 & 0.143 & 0.720 & 0.826 & 0.370 & -0.089 to -0.082 \\
+LightGBM, isotonic & 0.436 & 0.141 & 0.722 & 1.016 & 0.178 & -0.093 to -0.086 \\
+Hierarchical Bayes & 0.436 & 0.141 & 0.720 & 0.996 & 0.132 & -0.093 to -0.086 \\
+Hierarchical Bayes, updated & 0.435 & 0.141 & 0.721 & 0.996 & 0.129 & -0.093 to -0.087 \\
+\bottomrule
+\end{tabular}
