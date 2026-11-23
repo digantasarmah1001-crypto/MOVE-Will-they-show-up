@@ -20,6 +20,7 @@ bayes:
 	$(PY) scripts/05_rq1.py
 	$(PY) scripts/08_robustness.py
 	$(PY) scripts/10_sms_effect.py
+	$(PY) scripts/11_fairness.py
 
 simulate:
 	$(PY) scripts/06_simulate.py
