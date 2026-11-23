@@ -26,6 +26,7 @@ bayes:
 simulate:
 	$(PY) scripts/06_simulate.py
 	$(PY) scripts/07_matching.py
+	$(PY) scripts/13_clinic_overbooking.py
 
 figures:
 	$(PY) scripts/09_figures.py

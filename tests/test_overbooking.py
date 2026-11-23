@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.stats import poisson_binom
 
-from thesis.opt.overbooking import best_invites, plan_value
+from thesis.opt.overbooking import best_extra, best_invites, plan_value
 
 
 def test_matches_simulation():
@@ -24,3 +24,11 @@ def test_uncertainty_is_averaged():
     draws = np.array([[1.0] * 4, [0.0] * 4])
     assert plan_value(draws, 4, 2) == (4 - 2) / 2
     assert plan_value(np.full(4, 0.5), 4, 2) != plan_value(draws, 4, 2)
+
+
+def test_clinic_overbooking():
+    assert best_extra(np.ones(10), 0.8, slots=10) == 0
+    assert best_extra(np.full(10, 0.7), 0.7, slots=10) > 0
+    cheap = best_extra(np.full(10, 0.7), 0.7, slots=10, over_cost=0.5)
+    dear = best_extra(np.full(10, 0.7), 0.7, slots=10, over_cost=2.0)
+    assert cheap > dear
