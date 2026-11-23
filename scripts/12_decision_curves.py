@@ -27,16 +27,19 @@ def recalibrate(r, target):
 
 
 def net_benefit(r, y, threshold):
-    call = r >= threshold
-    return ((call & (y == 1)).sum() - (call & (y == 0)).sum() * threshold / (1 - threshold)) / len(y)
+    remind = r >= threshold
+    return ((remind & (y == 1)).sum() - (remind & (y == 0)).sum() * threshold / (1 - threshold)) / len(y)
+
+
+def remind_everyone(y, threshold):
+    return y.mean() - (1 - y.mean()) * threshold / (1 - threshold)
 
 
 rows = []
 y = no_show[late]
 for threshold in THRESHOLDS:
-    rows.append({"threshold": threshold, "strategy": "call everyone", "version": "",
-                 "net benefit": y.mean() - (1 - y.mean()) * threshold / (1 - threshold)})
-    rows.append({"threshold": threshold, "strategy": "call no one", "version": "", "net benefit": 0.0})
+    rows.append({"threshold": threshold, "strategy": "remind everyone", "version": "", "net benefit": remind_everyone(y, threshold)})
+    rows.append({"threshold": threshold, "strategy": "remind no one", "version": "", "net benefit": 0.0})
     for model in MODELS:
         fixed = recalibrate(risk[model].values[late], no_show[early].mean())
         for version, r in [("as fitted", risk[model].values[late]), ("level updated", fixed)]:
@@ -44,8 +47,7 @@ for threshold in THRESHOLDS:
 curves = pd.DataFrame(rows)
 curves.to_csv(tables / "decision_curves.csv", index=False)
 # patient bootstrap for the Bayesian model against the others, at a few thresholds
-lt = t[late].reset_index(drop=True)
-rows_of = lt.groupby("patient_id").indices
+rows_of = t[late].reset_index(drop=True).groupby("patient_id").indices
 patients = np.array(list(rows_of))
 rng = np.random.default_rng(0)
 r_late = {m: risk[m].values[late] for m in MODELS}
@@ -54,33 +56,40 @@ for _ in range(200):
     idx = np.concatenate([rows_of[p] for p in rng.choice(patients, len(patients))])
     for threshold in [0.1, 0.2, 0.3]:
         bayes = net_benefit(r_late["hierarchical Bayes, online"][idx], y[idx], threshold)
-        everyone = y[idx].mean() - (1 - y[idx].mean()) * threshold / (1 - threshold)
         others = {m: net_benefit(r_late[m][idx], y[idx], threshold) for m in MODELS[:3]}
-        others["call everyone"] = everyone
+        others["remind everyone"] = remind_everyone(y[idx], threshold)
         diffs += [{"threshold": threshold, "against": k, "difference": bayes - v} for k, v in others.items()]
 diffs = pd.DataFrame(diffs).groupby(["threshold", "against"]).difference.quantile([0.025, 0.5, 0.975]).unstack()
 diffs.columns = ["low", "median", "high"]
 diffs.to_csv(tables / "decision_curve_differences.csv")
-# no-shows prevented per 100 calls when calling the riskiest share of patients, if a reminder lowers each
-# patient's no-show risk by the same proportion as an SMS did in the outage analysis
-effect = pd.read_csv(tables / "sms_effect.csv").set_index("estimate").loc["effect of one SMS (outage design)", "value"]
-check = pd.read_csv(tables / "sms_outage_check.csv")
-without = check.query("eligible == 1 and outage == 1").no_show.iloc[0]
-rr = (without + effect) / without
+# no-shows prevented per 100 SMS-like reminders, only for bookings 3+ days ahead where the effect was measured.
+# Three versions of the effect: the same for everyone, proportional to baseline risk, and as measured per risk third
+by_risk = pd.read_csv(tables / "sms_effect_by_risk.csv").set_index("risk group")["absolute effect"]
+overall = pd.read_csv(tables / "sms_effect.csv").set_index("estimate").loc["effect of one SMS (outage design)", "value"]
+base = pd.read_parquet(root / "data/processed/baseline_risk.parquet")
+e = t[late].reset_index(drop=True).merge(base, on="appointment_id", how="left")
+eligible = ((e.lead_days >= 3) & e.baseline_risk.notna()).values
+e = e[eligible].reset_index(drop=True)
 rows = []
 for share in [0.1, 0.2, 0.3, 0.5, 1.0]:
     for model in MODELS + ["random"]:
-        r = np.random.default_rng(0).random(late.sum()) if model == "random" else risk[model].values[late]
-        called = np.argsort(-r)[:int(share * late.sum())]
-        rows.append({"share called": share, "model": model, "no-shows among called": y[called].mean(),
-                     "prevented per 100 calls": 100 * y[called].mean() * (1 - rr)})
+        r = np.random.default_rng(0).random(len(e)) if model == "random" else risk[model].values[late][eligible]
+        chosen = e.iloc[np.argsort(-r)[:int(share * len(e))]]
+        rows.append({"share reminded": share, "model": model, "no-shows among reminded": chosen.no_show.mean(),
+                     "same for everyone": -100 * overall,
+                     "proportional to risk": -100 * overall * chosen.baseline_risk.mean() / e.baseline_risk.mean(),
+                     "measured per risk third": -100 * chosen.risk_group.map(by_risk).mean()})
 prevented = pd.DataFrame(rows)
 prevented.to_csv(tables / "reminders_prevented.csv", index=False)
+# how coarse each score is: share of later visits whose exact score is shared with 50 or more other visits
+ties = pd.DataFrame([{"model": m, "share with a tied score": (pd.Series(r_late[m]).map(pd.Series(r_late[m]).value_counts()) > 50).mean()}
+                     for m in MODELS])
+ties.to_csv(tables / "score_ties.csv", index=False)
 show = curves[curves.threshold.isin([0.1, 0.2, 0.3, 0.4])].pivot_table(index=["strategy", "version"], columns="threshold",
                                                                        values="net benefit", sort=False)
 print(f"later test days: {late.sum()} visits, no-show rate {y.mean():.3f}; first test days rate {no_show[early].mean():.3f}")
 print(show.round(4).to_string())
-print("hierarchical Bayes minus each alternative (net benefit, 95% interval)")
 print(diffs.round(4).to_string())
-print(f"assumed risk ratio of a reminder {rr:.3f}")
-print(prevented.pivot_table(index="model", columns="share called", values="prevented per 100 calls", sort=False).round(2).to_string())
+print(f"eligible later visits: {len(e)}")
+print(prevented.round(2).to_string(index=False))
+print(ties.round(3).to_string(index=False))

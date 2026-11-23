@@ -1,0 +1,5 @@
+model,share with a tied score
+MOVE C,0.6557296366171766
+logistic regression,0.0
+LightGBM + isotonic,0.007095398244606677
+"hierarchical Bayes, online",0.0

@@ -110,15 +110,15 @@ ax.set(xticks=mat["available users"].unique(), xlabel="users available per day (
        ylabel="share of plans that happen")
 ax.legend(loc="lower right")
 save(fig, "matching")
-# decision curves for reminder calls, on the later test days with the level updated
+# decision curves for reminders, on the later test days with the level updated
 dc = pd.read_csv(tables / "decision_curves.csv")
 fig, ax = plt.subplots(figsize=(6.5, 4))
-for strategy, color, style in [("call everyone", MUTED, "--"), ("MOVE C", ORANGE, "-"), ("logistic regression", AQUA, "-"),
+for strategy, color, style in [("remind everyone", MUTED, "--"), ("MOVE C", ORANGE, "-"), ("logistic regression", AQUA, "-"),
                                ("hierarchical Bayes, online", BLUE, "-")]:
     d = dc[(dc.strategy == strategy) & (dc.version.fillna("").isin(["", "level updated"]))]
     ax.plot(d.threshold, d["net benefit"], color=color, linestyle=style, label=strategy.replace(", online", ""))
-ax.axhline(0, color=INK, linewidth=1, label="call no one")
-ax.set(xlabel="risk threshold for a reminder call", ylabel="net benefit (no-shows reached per patient)", ylim=(-0.02, 0.2))
+ax.axhline(0, color=INK, linewidth=1, label="remind no one")
+ax.set(xlabel="risk threshold for a reminder", ylabel="net benefit (no-shows reached per patient)", ylim=(-0.02, 0.2))
 ax.legend(loc="upper right")
 save(fig, "decision_curves")
 # and one table: what MOVE's labels mean in real show rates (rating part at its prior, as there are no ratings)

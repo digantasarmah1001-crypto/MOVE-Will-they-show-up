@@ -1,6 +1,6 @@
 threshold,strategy,version,net benefit
-0.05,call everyone,,0.14825000323793652
-0.05,call no one,,0.0
+0.05,remind everyone,,0.14825000323793652
+0.05,remind no one,,0.0
 0.05,MOVE C,as fitted,0.14825000323793652
 0.05,MOVE C,level updated,0.1481463892690466
 0.05,logistic regression,as fitted,0.1524139896126996
@@ -9,8 +9,8 @@ threshold,strategy,version,net benefit
 0.05,LightGBM + isotonic,level updated,0.15434164115892224
 0.05,"hierarchical Bayes, online",as fitted,0.1526557555401094
 0.05,"hierarchical Bayes, online",level updated,0.1534155913119687
-0.06,call everyone,,0.13918883305961668
-0.06,call no one,,0.0
+0.06,remind everyone,,0.13918883305961668
+0.06,remind no one,,0.0
 0.06,MOVE C,as fitted,0.13923333746380742
 0.06,MOVE C,level updated,0.13902215970274548
 0.06,logistic regression,as fitted,0.14703207982170316
@@ -19,8 +19,8 @@ threshold,strategy,version,net benefit
 0.06,LightGBM + isotonic,level updated,0.14824853353625014
 0.06,"hierarchical Bayes, online",as fitted,0.14789511620885304
 0.06,"hierarchical Bayes, online",level updated,0.14830961801259038
-0.07,call everyone,,0.1299327990064943
-0.07,call no one,,0.0
+0.07,remind everyone,,0.1299327990064943
+0.07,remind no one,,0.0
 0.07,MOVE C,as fitted,0.12997513589700846
 0.07,MOVE C,level updated,0.12979432209377093
 0.07,logistic regression,as fitted,0.14145460735621113
@@ -29,8 +29,8 @@ threshold,strategy,version,net benefit
 0.07,LightGBM + isotonic,level updated,0.14207775346346635
 0.07,"hierarchical Bayes, online",as fitted,0.1425218498045888
 0.07,"hierarchical Bayes, online",level updated,0.1426951664501311
-0.08,call everyone,,0.12047554682178227
-0.08,call no one,,0.0
+0.08,remind everyone,,0.12047554682178227
+0.08,remind no one,,0.0
 0.08,MOVE C,as fitted,0.12050764462736231
 0.08,MOVE C,level updated,0.12031327458246104
 0.08,logistic regression,as fitted,0.13562749426697526
@@ -39,8 +39,8 @@ threshold,strategy,version,net benefit
 0.08,LightGBM + isotonic,level updated,0.13593242341998552
 0.08,"hierarchical Bayes, online",as fitted,0.136542281726006
 0.08,"hierarchical Bayes, online",level updated,0.1366564072569572
-0.09,call everyone,,0.11081044294070297
-0.09,call no one,,0.0
+0.09,remind everyone,,0.11081044294070297
+0.09,remind no one,,0.0
 0.09,MOVE C,as fitted,0.11079196416740505
 0.09,MOVE C,level updated,0.11087804820886603
 0.09,logistic regression,as fitted,0.1295497218719268
@@ -49,8 +49,8 @@ threshold,strategy,version,net benefit
 0.09,LightGBM + isotonic,level updated,0.12969665065473449
 0.09,"hierarchical Bayes, online",as fitted,0.13044166070989138
 0.09,"hierarchical Bayes, online",level updated,0.1304998012405116
-0.1,call everyone,,0.10093055897337742
-0.1,call no one,,0.0
+0.1,remind everyone,,0.10093055897337742
+0.1,remind no one,,0.0
 0.1,MOVE C,as fitted,0.10091233058996163
 0.1,MOVE C,level updated,0.10076194642678114
 0.1,logistic regression,as fitted,0.12337425605410185
@@ -59,8 +59,8 @@ threshold,strategy,version,net benefit
 0.1,LightGBM + isotonic,level updated,0.12341526991678743
 0.1,"hierarchical Bayes, online",as fitted,0.12424466136220708
 0.1,"hierarchical Bayes, online",level updated,0.1239940210902396
-0.11,call everyone,,0.09082865514161763
-0.11,call no one,,0.0
+0.11,remind everyone,,0.09082865514161763
+0.11,remind no one,,0.0
 0.11,MOVE C,as fitted,0.09091529116616699
 0.11,MOVE C,level updated,0.09079916202687743
 0.11,logistic regression,as fitted,0.11699549953502263
@@ -69,8 +69,8 @@ threshold,strategy,version,net benefit
 0.11,LightGBM + isotonic,level updated,0.11727614495497232
 0.11,"hierarchical Bayes, online",as fitted,0.11760794249579953
 0.11,"hierarchical Bayes, online",level updated,0.11746600688111232
-0.12,call everyone,,0.08049716258640874
-0.12,call no one,,0.0
+0.12,remind everyone,,0.08049716258640874
+0.12,remind no one,,0.0
 0.12,MOVE C,as fitted,0.0807469742954937
 0.12,MOVE C,level updated,0.07894050007084213
 0.12,logistic regression,as fitted,0.11047829620957338
@@ -79,8 +79,8 @@ threshold,strategy,version,net benefit
 0.12,LightGBM + isotonic,level updated,0.110877249237515
 0.12,"hierarchical Bayes, online",as fitted,0.11116621054279983
 0.12,"hierarchical Bayes, online",level updated,0.11100961215800033
-0.13,call everyone,,0.06992816445521803
-0.13,call no one,,0.0
+0.13,remind everyone,,0.06992816445521803
+0.13,remind no one,,0.0
 0.13,MOVE C,as fitted,0.07041325945180966
 0.13,MOVE C,level updated,0.06743669015299585
 0.13,logistic regression,as fitted,0.10385888591263387
@@ -89,8 +89,8 @@ threshold,strategy,version,net benefit
 0.13,LightGBM + isotonic,level updated,0.10441988012637927
 0.13,"hierarchical Bayes, online",as fitted,0.10446277968390097
 0.13,"hierarchical Bayes, online",level updated,0.1046136352707905
-0.14,call everyone,,0.05911337566981359
-0.14,call no one,,0.0
+0.14,remind everyone,,0.05911337566981359
+0.14,remind no one,,0.0
 0.14,MOVE C,as fitted,0.05981347276774898
 0.14,MOVE C,level updated,0.055342007924259785
 0.14,logistic regression,as fitted,0.09703212243877965
@@ -99,8 +99,8 @@ threshold,strategy,version,net benefit
 0.14,LightGBM + isotonic,level updated,0.09795350363306517
 0.14,"hierarchical Bayes, online",as fitted,0.09803362373691608
 0.14,"hierarchical Bayes, online",level updated,0.09807654522112194
-0.15,call everyone,,0.04804412126592905
-0.15,call no one,,0.0
+0.15,remind everyone,,0.04804412126592905
+0.15,remind no one,,0.0
 0.15,MOVE C,as fitted,0.0492142226425473
 0.15,MOVE C,level updated,0.04432874782264641
 0.15,logistic regression,as fitted,0.09057549687088354
@@ -109,8 +109,8 @@ threshold,strategy,version,net benefit
 0.15,LightGBM + isotonic,level updated,0.09128238285717043
 0.15,"hierarchical Bayes, online",as fitted,0.0914729766896505
 0.15,"hierarchical Bayes, online",level updated,0.09119552997148332
-0.16,call everyone,,0.03671131318576151
-0.16,call no one,,0.0
+0.16,remind everyone,,0.03671131318576151
+0.16,remind no one,,0.0
 0.16,MOVE C,as fitted,0.038277652132134944
 0.16,MOVE C,level updated,0.03320560444668393
 0.16,logistic regression,as fitted,0.0837581197682912
@@ -119,8 +119,8 @@ threshold,strategy,version,net benefit
 0.16,LightGBM + isotonic,level updated,0.08492213225212979
 0.16,"hierarchical Bayes, online",as fitted,0.08463112913117014
 0.16,"hierarchical Bayes, online",level updated,0.08428934694212357
-0.17,call everyone,,0.025105425392818903
-0.17,call no one,,0.0
+0.17,remind everyone,,0.025105425392818903
+0.17,remind no one,,0.0
 0.17,MOVE C,as fitted,0.02728756054486174
 0.17,MOVE C,level updated,0.022240384719914835
 0.17,logistic regression,as fitted,0.0768515782430847
@@ -129,8 +129,8 @@ threshold,strategy,version,net benefit
 0.17,LightGBM + isotonic,level updated,0.07834487815917923
 0.17,"hierarchical Bayes, online",as fitted,0.0776120642030018
 0.17,"hierarchical Bayes, online",level updated,0.07701464540797921
-0.18,call everyone,,0.01321646716590208
-0.18,call no one,,0.0
+0.18,remind everyone,,0.01321646716590208
+0.18,remind no one,,0.0
 0.18,MOVE C,as fitted,0.016305511262806844
 0.18,MOVE C,level updated,0.012044070895962848
 0.18,logistic regression,as fitted,0.06950449251847125
@@ -139,8 +139,8 @@ threshold,strategy,version,net benefit
 0.18,LightGBM + isotonic,level updated,0.0715801941056077
 0.18,"hierarchical Bayes, online",as fitted,0.0707979297002387
 0.18,"hierarchical Bayes, online",level updated,0.07062587154458208
-0.19,call everyone,,0.0010339544148638136
-0.19,call no one,,0.0
+0.19,remind everyone,,0.0010339544148638136
+0.19,remind no one,,0.0
 0.19,MOVE C,as fitted,0.005275091622943856
 0.19,MOVE C,level updated,0.004402154594919756
 0.19,logistic regression,as fitted,0.06312084101710329
@@ -149,8 +149,8 @@ threshold,strategy,version,net benefit
 0.19,LightGBM + isotonic,level updated,0.0646854439269609
 0.19,"hierarchical Bayes, online",as fitted,0.06429606540343968
 0.19,"hierarchical Bayes, online",level updated,0.06429859712335856
-0.2,call everyone,,-0.011453121154950396
-0.2,call no one,,0.0
+0.2,remind everyone,,-0.011453121154950396
+0.2,remind no one,,0.0
 0.2,MOVE C,as fitted,-0.00655196456402264
 0.2,MOVE C,level updated,-0.003629726847674514
 0.2,logistic regression,as fitted,0.05612747108522681
@@ -159,8 +159,8 @@ threshold,strategy,version,net benefit
 0.2,LightGBM + isotonic,level updated,0.058178164219506195
 0.2,"hierarchical Bayes, online",as fitted,0.058403740464276925
 0.2,"hierarchical Bayes, online",level updated,0.05854728898367648
-0.21,call everyone,,-0.024256325220202934
-0.21,call no one,,0.0
+0.21,remind everyone,,-0.024256325220202934
+0.21,remind no one,,0.0
 0.21,MOVE C,as fitted,-0.01769514551614645
 0.21,MOVE C,level updated,0.011240913352763867
 0.21,logistic regression,as fitted,0.049991226148362204
@@ -169,8 +169,8 @@ threshold,strategy,version,net benefit
 0.21,LightGBM + isotonic,level updated,0.052018037792976556
 0.21,"hierarchical Bayes, online",as fitted,0.05228800245875512
 0.21,"hierarchical Bayes, online",level updated,0.05198481137257304
-0.22,call everyone,,-0.03738781656917989
-0.22,call no one,,0.0
+0.22,remind everyone,,-0.03738781656917989
+0.22,remind no one,,0.0
 0.22,MOVE C,as fitted,-0.028987336181167684
 0.22,MOVE C,level updated,0.009249151854352414
 0.22,logistic regression,as fitted,0.04524460036723182
@@ -179,8 +179,8 @@ threshold,strategy,version,net benefit
 0.22,LightGBM + isotonic,level updated,0.04744041947716789
 0.22,"hierarchical Bayes, online",as fitted,0.04636143939728551
 0.22,"hierarchical Bayes, online",level updated,0.046603316023380005
-0.23,call everyone,,-0.05086038561553288
-0.23,call no one,,0.0
+0.23,remind everyone,,-0.05086038561553288
+0.23,remind no one,,0.0
 0.23,MOVE C,as fitted,-0.04016109393026792
 0.23,MOVE C,level updated,0.0074719800747197985
 0.23,logistic regression,as fitted,0.03955494099862897
@@ -189,8 +189,8 @@ threshold,strategy,version,net benefit
 0.23,LightGBM + isotonic,level updated,0.04117685284119538
 0.23,"hierarchical Bayes, online",as fitted,0.04109269452555483
 0.23,"hierarchical Bayes, online",level updated,0.040904669934281934
-0.24,call everyone,,-0.06468749595257939
-0.24,call no one,,0.0
+0.24,remind everyone,,-0.06468749595257939
+0.24,remind no one,,0.0
 0.24,MOVE C,as fitted,-0.05007792633910258
 0.24,MOVE C,level updated,0.005536871462554343
 0.24,logistic regression,as fitted,0.03499130074386195
@@ -199,8 +199,8 @@ threshold,strategy,version,net benefit
 0.24,LightGBM + isotonic,level updated,0.03652824128239557
 0.24,"hierarchical Bayes, online",as fitted,0.03584611598720368
 0.24,"hierarchical Bayes, online",level updated,0.03629942710109702
-0.25,call everyone,,-0.07888332923194707
-0.25,call no one,,0.0
+0.25,remind everyone,,-0.07888332923194707
+0.25,remind no one,,0.0
 0.25,MOVE C,as fitted,-0.06071418806223169
 0.25,MOVE C,level updated,0.0044705110327290624
 0.25,logistic regression,as fitted,0.030610012851010313
@@ -209,8 +209,8 @@ threshold,strategy,version,net benefit
 0.25,LightGBM + isotonic,level updated,0.03210018319525333
 0.25,"hierarchical Bayes, online",as fitted,0.03066469800125775
 0.25,"hierarchical Bayes, online",level updated,0.03188144259426352
-0.26,call everyone,,-0.09346283368102748
-0.26,call no one,,0.0
+0.26,remind everyone,,-0.09346283368102748
+0.26,remind no one,,0.0
 0.26,MOVE C,as fitted,-0.06574854733332301
 0.26,MOVE C,level updated,0.0034972631560278205
 0.26,logistic regression,as fitted,0.026348635568551902
@@ -219,8 +219,8 @@ threshold,strategy,version,net benefit
 0.26,LightGBM + isotonic,level updated,0.027901619936727802
 0.26,"hierarchical Bayes, online",as fitted,0.026445073570001795
 0.26,"hierarchical Bayes, online",level updated,0.027745323865412456
-0.27,call everyone,,-0.10844177660816484
-0.27,call no one,,0.0
+0.27,remind everyone,,-0.10844177660816484
+0.27,remind no one,,0.0
 0.27,MOVE C,as fitted,-0.07359909567241951
 0.27,MOVE C,level updated,0.0025900535202816348
 0.27,logistic regression,as fitted,0.02266830572295079
@@ -229,8 +229,8 @@ threshold,strategy,version,net benefit
 0.27,LightGBM + isotonic,level updated,0.02521734538054684
 0.27,"hierarchical Bayes, online",as fitted,0.023146988065527778
 0.27,"hierarchical Bayes, online",level updated,0.022957088262956154
-0.28,call everyone,,-0.12383680128327823
-0.28,call no one,,0.0
+0.28,remind everyone,,-0.12383680128327823
+0.28,remind no one,,0.0
 0.28,MOVE C,as fitted,-0.07930713914636485
 0.28,MOVE C,level updated,0.0017727102871881787
 0.28,logistic regression,as fitted,0.01878434910999918
@@ -239,8 +239,8 @@ threshold,strategy,version,net benefit
 0.28,LightGBM + isotonic,level updated,0.02269205880476489
 0.28,"hierarchical Bayes, online",as fitted,0.019549941213463467
 0.28,"hierarchical Bayes, online",level updated,0.01915347387416946
-0.29,call everyone,,-0.1396654886252962
-0.29,call no one,,0.0
+0.29,remind everyone,,-0.1396654886252962
+0.29,remind no one,,0.0
 0.29,MOVE C,as fitted,-0.08036117616204982
 0.29,MOVE C,level updated,0.000626761141040319
 0.29,logistic regression,as fitted,0.015622238062944153
@@ -249,8 +249,8 @@ threshold,strategy,version,net benefit
 0.29,LightGBM + isotonic,level updated,0.017845651548533268
 0.29,"hierarchical Bayes, online",as fitted,0.016048551170859134
 0.29,"hierarchical Bayes, online",level updated,0.01536980062641455
-0.3,call everyone,,-0.1559464241770862
-0.3,call no one,,0.0
+0.3,remind everyone,,-0.1559464241770862
+0.3,remind no one,,0.0
 0.3,MOVE C,as fitted,-0.08781068000984332
 0.3,MOVE C,level updated,0.00022850580639113098
 0.3,logistic regression,as fitted,0.012995535348090514
@@ -259,8 +259,8 @@ threshold,strategy,version,net benefit
 0.3,LightGBM + isotonic,level updated,0.014870454785145945
 0.3,"hierarchical Bayes, online",as fitted,0.012796325157903372
 0.3,"hierarchical Bayes, online",level updated,0.013159590798832863
-0.31,call everyone,,-0.17269927090429038
-0.31,call no one,,0.0
+0.31,remind everyone,,-0.17269927090429038
+0.31,remind no one,,0.0
 0.31,MOVE C,as fitted,-0.0971166660128225
 0.31,MOVE C,level updated,0.00030968438346653794
 0.31,logistic regression,as fitted,0.010144095370902028
@@ -269,8 +269,8 @@ threshold,strategy,version,net benefit
 0.31,LightGBM + isotonic,level updated,0.011598007082915758
 0.31,"hierarchical Bayes, online",as fitted,0.00920909818243203
 0.31,"hierarchical Bayes, online",level updated,0.01155283239358091
-0.32,call everyone,,-0.18994484841758874
-0.32,call no one,,0.0
+0.32,remind everyone,,-0.18994484841758874
+0.32,remind no one,,0.0
 0.32,MOVE C,as fitted,-0.10717163577759875
 0.32,MOVE C,level updated,0.00015923029042639914
 0.32,logistic regression,as fitted,0.00806284288795495
@@ -279,8 +279,8 @@ threshold,strategy,version,net benefit
 0.32,LightGBM + isotonic,level updated,0.008552596660024024
 0.32,"hierarchical Bayes, online",as fitted,0.0071098737255545184
 0.32,"hierarchical Bayes, online",level updated,0.010646716237146976
-0.33,call everyone,,-0.2077052192894931
-0.33,call no one,,0.0
+0.33,remind everyone,,-0.2077052192894931
+0.33,remind no one,,0.0
 0.33,MOVE C,as fitted,-0.11692440104456803
 0.33,MOVE C,level updated,0.0002626111506286124
 0.33,logistic regression,as fitted,0.006957665123647601
@@ -289,8 +289,8 @@ threshold,strategy,version,net benefit
 0.33,LightGBM + isotonic,level updated,0.00664240931345242
 0.33,"hierarchical Bayes, online",as fitted,0.0067574929878537636
 0.33,"hierarchical Bayes, online",level updated,0.008201548242709009
-0.34,call everyone,,-0.22600378321812176
-0.34,call no one,,0.0
+0.34,remind everyone,,-0.22600378321812176
+0.34,remind no one,,0.0
 0.34,MOVE C,as fitted,-0.013544517440834406
 0.34,MOVE C,level updated,0.00029206841609433584
 0.34,logistic regression,as fitted,0.004797379089889941
@@ -299,8 +299,8 @@ threshold,strategy,version,net benefit
 0.34,LightGBM + isotonic,level updated,0.004648237771033273
 0.34,"hierarchical Bayes, online",as fitted,0.00619930748714277
 0.34,"hierarchical Bayes, online",level updated,0.00673248770205541
-0.35,call everyone,,-0.24486537988301588
-0.35,call no one,,0.0
+0.35,remind everyone,,-0.24486537988301588
+0.35,remind no one,,0.0
 0.35,MOVE C,as fitted,-0.0150773269057249
 0.35,MOVE C,level updated,0.0005457998649697443
 0.35,logistic regression,as fitted,0.0020191440091366286
@@ -309,8 +309,8 @@ threshold,strategy,version,net benefit
 0.35,LightGBM + isotonic,level updated,0.003732261504388488
 0.35,"hierarchical Bayes, online",as fitted,0.004022513455701874
 0.35,"hierarchical Bayes, online",level updated,0.0057230113008966315
-0.36,call everyone,,-0.26431640144368795
-0.36,call no one,,0.0
+0.36,remind everyone,,-0.26431640144368795
+0.36,remind no one,,0.0
 0.36,MOVE C,as fitted,-0.015869801492904602
 0.36,MOVE C,level updated,0.000792080223115413
 0.36,logistic regression,as fitted,0.0008894881469936838
@@ -319,8 +319,8 @@ threshold,strategy,version,net benefit
 0.36,LightGBM + isotonic,level updated,0.003716881305881388
 0.36,"hierarchical Bayes, online",as fitted,0.003134997129029612
 0.36,"hierarchical Bayes, online",level updated,0.0034707981297678616
-0.37,call everyone,,-0.28438491575231795
-0.37,call no one,,0.0
+0.37,remind everyone,,-0.28438491575231795
+0.37,remind no one,,0.0
 0.37,MOVE C,as fitted,-0.016415961293329843
 0.37,MOVE C,level updated,0.0006998397204286794
 0.37,logistic regression,as fitted,0.0003984203803742835
@@ -329,8 +329,8 @@ threshold,strategy,version,net benefit
 0.37,LightGBM + isotonic,level updated,0.0032166586591982384
 0.37,"hierarchical Bayes, online",as fitted,0.0024413013503326027
 0.37,"hierarchical Bayes, online",level updated,0.0029347697299464993
-0.38,call everyone,,-0.30510080149025864
-0.38,call no one,,0.0
+0.38,remind everyone,,-0.30510080149025864
+0.38,remind no one,,0.0
 0.38,MOVE C,as fitted,-0.016611937415491596
 0.38,MOVE C,level updated,0.0006165309681123832
 0.38,logistic regression,as fitted,-0.0008943668121115238
@@ -339,8 +339,8 @@ threshold,strategy,version,net benefit
 0.38,LightGBM + isotonic,level updated,0.0020903839691364056
 0.38,"hierarchical Bayes, online",as fitted,0.0007461876953119807
 0.38,"hierarchical Bayes, online",level updated,0.0016908295649090692
-0.39,call everyone,,-0.3264958965966563
-0.39,call no one,,0.0
+0.39,remind everyone,,-0.3264958965966563
+0.39,remind no one,,0.0
 0.39,MOVE C,as fitted,-0.01730381590288994
 0.39,MOVE C,level updated,0.0007550584884576233
 0.39,logistic regression,as fitted,-0.0009614725186949253
@@ -349,8 +349,8 @@ threshold,strategy,version,net benefit
 0.39,LightGBM + isotonic,level updated,0.001828142502329721
 0.39,"hierarchical Bayes, online",as fitted,0.0006246209579493566
 0.39,"hierarchical Bayes, online",level updated,0.00048813220179896324
-0.4,call everyone,,-0.34860416153993395
-0.4,call no one,,0.0
+0.4,remind everyone,,-0.34860416153993395
+0.4,remind no one,,0.0
 0.4,MOVE C,as fitted,-0.017075438164766366
 0.4,MOVE C,level updated,0.0009433188417685178
 0.4,logistic regression,as fitted,-0.0015448554944904743
@@ -359,8 +359,8 @@ threshold,strategy,version,net benefit
 0.4,LightGBM + isotonic,level updated,0.0009023049790829277
 0.4,"hierarchical Bayes, online",as fitted,-0.0005058376397889216
 0.4,"hierarchical Bayes, online",level updated,0.0004648237771033268
-0.41,call everyone,,-0.37146185919315305
-0.41,call no one,,0.0
+0.41,remind everyone,,-0.37146185919315305
+0.41,remind no one,,0.0
 0.41,MOVE C,as fitted,-0.01705829112612944
 0.41,MOVE C,level updated,0.0009766860520889961
 0.41,logistic regression,as fitted,-0.0014333997433505356
@@ -369,8 +369,8 @@ threshold,strategy,version,net benefit
 0.41,LightGBM + isotonic,level updated,0.0006186836913588679
 0.41,"hierarchical Bayes, online",as fitted,-0.0011560348075615643
 0.41,"hierarchical Bayes, online",level updated,0.0002148014164380815
-0.42,call everyone,,-0.3951077533171729
-0.42,call no one,,0.0
+0.42,remind everyone,,-0.3951077533171729
+0.42,remind no one,,0.0
 0.42,MOVE C,as fitted,-0.01673648451797397
 0.42,MOVE C,level updated,0.000895233623447484
 0.42,logistic regression,as fitted,-0.0015005416658416713
@@ -379,8 +379,8 @@ threshold,strategy,version,net benefit
 0.42,LightGBM + isotonic,level updated,0.0004398383205247521
 0.42,"hierarchical Bayes, online",as fitted,-0.0009107906058454604
 0.42,"hierarchical Bayes, online",level updated,2.9699693668875962e-05
-0.43,call everyone,,-0.4195833279367724
-0.43,call no one,,0.0
+0.43,remind everyone,,-0.4195833279367724
+0.43,remind no one,,0.0
 0.43,MOVE C,as fitted,-0.015887475229785557
 0.43,MOVE C,level updated,0.0004972031423814232
 0.43,logistic regression,as fitted,-0.001328273517852541
@@ -389,8 +389,8 @@ threshold,strategy,version,net benefit
 0.43,LightGBM + isotonic,level updated,0.00046914102580707416
 0.43,"hierarchical Bayes, online",as fitted,-0.0010008821578184623
 0.43,"hierarchical Bayes, online",level updated,-0.00018995894296482577
-0.44,call everyone,,-0.4449330302213576
-0.44,call no one,,0.0
+0.44,remind everyone,,-0.4449330302213576
+0.44,remind no one,,0.0
 0.44,MOVE C,as fitted,-0.013815812601802263
 0.44,MOVE C,level updated,0.00026659010745632024
 0.44,logistic regression,as fitted,-0.0009140232255645262
@@ -399,8 +399,8 @@ threshold,strategy,version,net benefit
 0.44,LightGBM + isotonic,level updated,0.00023143536801153175
 0.44,"hierarchical Bayes, online",as fitted,-0.0010751491146864763
 0.44,"hierarchical Bayes, online",level updated,0.000249012737733926
-0.45,call everyone,,-0.4712045398617461
-0.45,call no one,,0.0
+0.45,remind everyone,,-0.4712045398617461
+0.45,remind no one,,0.0
 0.45,MOVE C,as fitted,-0.011215427178022533
 0.45,MOVE C,level updated,0.0002274405112564411
 0.45,logistic regression,as fitted,-0.0014280281280527338
@@ -409,8 +409,8 @@ threshold,strategy,version,net benefit
 0.45,LightGBM + isotonic,level updated,0.0008351913855974227
 0.45,"hierarchical Bayes, online",as fitted,-0.0010290751001111092
 0.45,"hierarchical Bayes, online",level updated,0.0004996234181698871
-0.46,call everyone,,-0.49844906837770436
-0.46,call no one,,0.0
+0.46,remind everyone,,-0.49844906837770436
+0.46,remind no one,,0.0
 0.46,MOVE C,as fitted,-0.009750666095510653
 0.46,MOVE C,level updated,0.00016101738683971478
 0.46,logistic regression,as fitted,-0.0014704229288758858
@@ -419,8 +419,8 @@ threshold,strategy,version,net benefit
 0.46,LightGBM + isotonic,level updated,0.0002536783358701169
 0.46,"hierarchical Bayes, online",as fitted,-0.000527104087107368
 0.46,"hierarchical Bayes, online",level updated,0.0009600281932330158
-0.47,call everyone,,-0.526721692309359
-0.47,call no one,,0.0
+0.47,remind everyone,,-0.526721692309359
+0.47,remind no one,,0.0
 0.47,MOVE C,as fitted,-0.008188069454267992
 0.47,MOVE C,level updated,0.0001741154547973064
 0.47,logistic regression,as fitted,-0.0013728036302685397
@@ -429,8 +429,8 @@ threshold,strategy,version,net benefit
 0.47,LightGBM + isotonic,level updated,9.595696175496064e-05
 0.47,"hierarchical Bayes, online",as fitted,-0.00011685081633063579
 0.47,"hierarchical Bayes, online",level updated,0.0007970618597387807
-0.48,call everyone,,-0.5560817248537699
-0.48,call no one,,0.0
+0.48,remind everyone,,-0.5560817248537699
+0.48,remind no one,,0.0
 0.48,MOVE C,as fitted,-0.007259453695349028
 0.48,MOVE C,level updated,0.00026501265119918227
 0.48,logistic regression,as fitted,-0.0007981928661118223
@@ -439,8 +439,8 @@ threshold,strategy,version,net benefit
 0.48,LightGBM + isotonic,level updated,-0.00015459071319952257
 0.48,"hierarchical Bayes, online",as fitted,0.0004196033643987062
 0.48,"hierarchical Bayes, online",level updated,0.000533180214912641
-0.49,call everyone,,-0.5865931312234516
-0.49,call no one,,0.0
+0.49,remind everyone,,-0.5865931312234516
+0.49,remind no one,,0.0
 0.49,MOVE C,as fitted,-0.005604423706977664
 0.49,MOVE C,level updated,0.00012947513514469854
 0.49,logistic regression,as fitted,-0.000582236011458147
@@ -449,8 +449,8 @@ threshold,strategy,version,net benefit
 0.49,LightGBM + isotonic,level updated,5.1468376703482456e-05
 0.49,"hierarchical Bayes, online",as fitted,0.00032971928825668655
 0.49,"hierarchical Bayes, online",level updated,0.0007109069532168544
-0.5,call everyone,,-0.6183249938479207
-0.5,call no one,,0.0
+0.5,remind everyone,,-0.6183249938479207
+0.5,remind no one,,0.0
 0.5,MOVE C,as fitted,-0.00360921991633172
 0.5,MOVE C,level updated,8.202772537117546e-05
 0.5,logistic regression,as fitted,-8.202772537117546e-05

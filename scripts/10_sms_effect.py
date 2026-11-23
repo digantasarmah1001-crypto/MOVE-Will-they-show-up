@@ -2,6 +2,10 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import GroupKFold, cross_val_predict
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
 
 from thesis.data.datasets import noshow_data
 from thesis.models.causal import balance, diff_in_diff, e_value, effects, propensity
@@ -68,6 +72,38 @@ ps = propensity(person.loc[normal], t)
 w = np.where(t == 1, 1 / ps, 1 / (1 - ps))
 bal = pd.DataFrame({"before": balance(person.loc[normal], t), "after weighting": balance(person.loc[normal], t, w)})
 bal.to_csv(tables / "sms_balance.csv")
+# does the effect depend on the patient's risk? Risk here leaves SMS out and is cross-fitted by patient,
+# so no visit's own outcome decides its group
+model = make_pipeline(StandardScaler(), LogisticRegression(max_iter=3000))
+df["baseline_risk"] = cross_val_predict(model, covariates, df.no_show, groups=df.patient_id, cv=GroupKFold(2),
+                                        method="predict_proba")[:, 1]
+cuts = df.loc[df.eligible == 1, "baseline_risk"].quantile([1 / 3, 2 / 3]).values
+df["risk_group"] = pd.cut(df.baseline_risk, [-np.inf, *cuts, np.inf], labels=["low", "middle", "high"]).astype(str)
+df[["appointment_id", "baseline_risk", "risk_group"]].to_parquet(root / "data/processed/baseline_risk.parquet")
+
+
+def effect_by_risk(rows):
+    # outage design within one risk third of the eligible visits, against all never-eligible visits
+    d = df.loc[rows]
+    out = {}
+    for level in ["low", "middle", "high"]:
+        keep = d.index[(d.eligible == 0) | (d.risk_group == level)]
+        _, absolute = outage_effect(keep)
+        base = d.no_show[(d.eligible == 1) & (d.risk_group == level) & (d.outage == 1)].mean()
+        out[level] = (absolute, (base + absolute) / base)
+    return out
+
+
+point = effect_by_risk(everyone)
+boot = [effect_by_risk(np.concatenate([rows_of[p] for p in rng.choice(patients, len(patients))])) for _ in range(200)]
+by_risk = pd.DataFrame([{"risk group": level, "eligible visits": ((df.eligible == 1) & (df.risk_group == level)).sum(),
+                         "no-show without SMS": df.no_show[(df.eligible == 1) & (df.risk_group == level) & (df.outage == 1)].mean(),
+                         "absolute effect": point[level][0], "absolute low": np.percentile([b[level][0] for b in boot], 2.5),
+                         "absolute high": np.percentile([b[level][0] for b in boot], 97.5), "risk ratio": point[level][1],
+                         "ratio low": np.percentile([b[level][1] for b in boot], 2.5),
+                         "ratio high": np.percentile([b[level][1] for b in boot], 97.5)} for level in point])
+by_risk.to_csv(tables / "sms_effect_by_risk.csv", index=False)
 print(check.round(4).to_string(index=False))
 print(out.round(4).to_string(index=False))
+print(by_risk.round(3).to_string(index=False))
 print(f"propensity range on normal days {ps.min():.3f} to {ps.max():.3f}, largest imbalance", bal.abs().max().round(3).to_dict())
