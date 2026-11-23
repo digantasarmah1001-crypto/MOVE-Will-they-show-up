@@ -21,6 +21,7 @@ bayes:
 	$(PY) scripts/08_robustness.py
 	$(PY) scripts/10_sms_effect.py
 	$(PY) scripts/11_fairness.py
+	$(PY) scripts/12_decision_curves.py
 
 simulate:
 	$(PY) scripts/06_simulate.py
