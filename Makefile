@@ -1,7 +1,7 @@
 PY = .venv/bin/python
 
 # saved Bayesian fits in results/models are reused, delete them to refit (about an hour)
-all: data baselines bayes simulate figures
+all: data baselines bayes clinic figures
 
 setup:
 	python3 -m venv .venv
@@ -18,20 +18,18 @@ baselines:
 bayes:
 	$(PY) scripts/04_hierarchical.py
 	$(PY) scripts/05_rq1.py
-	$(PY) scripts/08_robustness.py
-	$(PY) scripts/10_sms_effect.py
-	$(PY) scripts/11_fairness.py
-	$(PY) scripts/12_decision_curves.py
+	$(PY) scripts/06_robustness.py
+	$(PY) scripts/07_sms_effect.py
+	$(PY) scripts/08_fairness.py
+	$(PY) scripts/09_decision_curves.py
 
-simulate:
-	$(PY) scripts/06_simulate.py
-	$(PY) scripts/07_matching.py
-	$(PY) scripts/13_clinic_overbooking.py
+clinic:
+	$(PY) scripts/10_clinic_overbooking.py
 
 figures:
-	$(PY) scripts/09_figures.py
+	$(PY) scripts/11_figures.py
 
 test:
 	$(PY) -m pytest -q
 
-.PHONY: all setup data baselines bayes simulate figures test
+.PHONY: all setup data baselines bayes clinic figures test

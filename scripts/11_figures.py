@@ -78,38 +78,6 @@ ax.minorticks_off()
 ax.invert_yaxis()
 ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1), ncol=2)
 save(fig, "drivers")
-# invite rules, as dots because the differences are small and bars would have to start at 0
-pol = pd.read_csv(tables / "sim_policies.csv")
-rules = pol.rule.unique()
-fig, ax = plt.subplots(figsize=(6.5, 3.8))
-for k, (scorer, color, marker) in enumerate([("MOVE C", ORANGE, "s"), ("learned", BLUE, "o")]):
-    vals = pol[pol.scorer == scorer].set_index("rule")["value per plan"].reindex(rules)
-    x = np.arange(len(rules)) + (k - 0.5) * 0.2
-    ax.plot(x, vals, marker=marker, color=color, linestyle="none", markersize=8, label=f"{scorer} score")
-    for xi, v in zip(x, vals):
-        ax.annotate(f"{v:.2f}", (xi, v), textcoords="offset points", xytext=(0, 8), ha="center", fontsize=8, color=INK)
-ax.set(xticks=range(len(rules)), xticklabels=rules, ylabel="value per plan", xlim=(-0.5, len(rules) - 0.5))
-ax.legend(loc="upper left")
-save(fig, "invite_rules")
-# recovery speed by half-life
-rec = pd.read_csv(tables / "sim_recovery.csv").query("target == 0.75")
-fig, ax = plt.subplots(figsize=(5.5, 3.6))
-for scorer, color, marker in [("MOVE C", ORANGE, "s"), ("learned", BLUE, "o")]:
-    ax.plot(rec.half_life, rec[scorer], color=color, marker=marker, label=f"{scorer} score")
-ax.set(xticks=rec.half_life, xlabel="half-life of past behaviour (days)", ylabel="reliable plans needed to reach 0.75",
-       ylim=(0, None))
-ax.legend(loc="upper left")
-save(fig, "recovery")
-# matching vs greedy
-mat = pd.read_csv(tables / "sim_matching.csv")
-fig, ax = plt.subplots(figsize=(5.5, 3.6))
-for method, color, marker in [("greedy", ORANGE, "s"), ("integer programme", BLUE, "o")]:
-    d = mat[mat.method == method]
-    ax.plot(d["available users"], d["plans that happen"], color=color, marker=marker, label=method)
-ax.set(xticks=mat["available users"].unique(), xlabel="users available per day (10 plans)",
-       ylabel="share of plans that happen")
-ax.legend(loc="lower right")
-save(fig, "matching")
 # decision curves for reminders, on the later test days with the level updated
 dc = pd.read_csv(tables / "decision_curves.csv")
 fig, ax = plt.subplots(figsize=(6.5, 4))

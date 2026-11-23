@@ -39,13 +39,13 @@ for over_cost in [0.5, 1.0, 2.0]:
             for policy, ks in decisions.items():
                 k = min(ks[i], len(extras))
                 shows = booked_shows + showed[extras[:k]].sum()
-                rows.append({"overflow cost": over_cost, "seed": seed, "policy": policy, "extra booked": k,
+                rows.append({"overflow cost": over_cost, "seed": seed, "clinic-day": i, "policy": policy, "extra booked": k,
                              "idle slots": max(len(s) - shows, 0), "overflow": max(shows - len(s), 0), "cost": real[k]})
                 if over_cost == 1.0:
                     came = s[showed[s] == 1]
                     burden += [{"seed": seed, "policy": policy, "welfare": w, "overflow per patient": max(shows - len(s), 0) / shows}
                                for w in t.scholarship.values[came]]
-            rows.append({"overflow cost": over_cost, "seed": seed, "policy": "perfect foresight",
+            rows.append({"overflow cost": over_cost, "seed": seed, "clinic-day": i, "policy": "perfect foresight",
                          "extra booked": int(np.argmin(real)), "cost": real.min()})
 res = pd.DataFrame(rows)
 summary = res.groupby(["overflow cost", "policy"], sort=False).agg(
@@ -54,9 +54,22 @@ summary = res.groupby(["overflow cost", "policy"], sort=False).agg(
 sd = res.groupby(["overflow cost", "policy", "seed"], sort=False).cost.mean().groupby(["overflow cost", "policy"], sort=False).std()
 summary["cost sd over seeds"] = sd.values
 summary.to_csv(tables / "clinic_policies.csv", index=False)
+# bootstrap over clinic-days: is the Bayesian schedule cheaper than the others, beyond chance in which days we saw?
+per_day = res.pivot_table(index=["overflow cost", "clinic-day"], columns="policy", values="cost")
+rng = np.random.default_rng(0)
+gaps = []
+for over_cost, d in per_day.groupby(level=0):
+    for other in ["fixed rate", "MOVE C"]:
+        diff = (d["hierarchical Bayes"] - d[other]).values
+        boot = [rng.choice(diff, len(diff)).mean() for _ in range(2000)]
+        gaps.append({"overflow cost": over_cost, "against": other, "difference": diff.mean(),
+                     "low": np.percentile(boot, 2.5), "high": np.percentile(boot, 97.5)})
+gaps = pd.DataFrame(gaps)
+gaps.to_csv(tables / "clinic_differences.csv", index=False)
 fair = pd.DataFrame(burden).groupby(["policy", "welfare"], sort=False)["overflow per patient"].mean().unstack()
 fair.columns = ["not on welfare", "on welfare"]
 fair.to_csv(tables / "clinic_fairness.csv")
 print(f"{len(sessions)} clinic-days, {sum(map(len, sessions))} booked visits")
 print(summary.round(3).to_string(index=False))
 print(fair.round(4).to_string())
+print(gaps.round(3).to_string(index=False))
