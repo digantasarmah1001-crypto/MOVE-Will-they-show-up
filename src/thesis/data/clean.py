@@ -26,6 +26,7 @@ def clean_noshow(df):
     df = drop(df, df.lead_days < 0, "appointment before it was scheduled", log)
     # one visit per patient per day, missed if any appointment that day was missed
     df = df.sort_values(["appointment_day", "scheduled_at", "appointment_id"])
+    df["sms_mixed"] = df.groupby(["patient_id", "appointment_day"]).sms_received.transform("nunique") > 1
     for col in ["no_show", "sms_received"]:
         df[col] = df.groupby(["patient_id", "appointment_day"])[col].transform("max")
     df = drop(df, df.duplicated(["patient_id", "appointment_day"]), "same-day appointments merged into one visit", log)

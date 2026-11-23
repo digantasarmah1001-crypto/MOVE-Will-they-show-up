@@ -19,6 +19,7 @@ bayes:
 	$(PY) scripts/04_hierarchical.py
 	$(PY) scripts/05_rq1.py
 	$(PY) scripts/08_robustness.py
+	$(PY) scripts/10_sms_effect.py
 
 simulate:
 	$(PY) scripts/06_simulate.py

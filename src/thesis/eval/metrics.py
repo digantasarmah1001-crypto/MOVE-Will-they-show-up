@@ -7,7 +7,7 @@ from sklearn.metrics import brier_score_loss, log_loss, roc_auc_score
 
 def calibration(y, p):
     # slope 1 and intercept 0 mean well calibrated
-    x = logit(np.clip(p, 1e-6, 1 - 1e-6)).reshape(-1, 1)
+    x = logit(np.clip(np.asarray(p, dtype=float), 1e-6, 1 - 1e-6)).reshape(-1, 1)
     fit = LogisticRegression(C=np.inf).fit(x, y)
     return fit.coef_[0, 0], fit.intercept_[0]
 
