@@ -17,7 +17,7 @@ def noshow_data():
         log_days_since_last=np.log1p(df.days_since_last.fillna(0)),
         weekday=df.appointment_day.dt.day_name().astype("category"), neighbourhood=df.neighbourhood.astype("category"))
     return {"df": df, "X": X, "y": 1 - df.no_show, "shows": df.w_shows, "visits": df.w_visits,
-            "people": df.patient_id, "strata": pd.cut(df.prior_visits, *STRATA), "date": "appointment_day"}
+            "people": df.patient_id, "strata": pd.cut(df.prior_visits, STRATA[0], labels=STRATA[1]), "date": "appointment_day"}
 
 
 def hotel_data():
@@ -29,7 +29,7 @@ def hotel_data():
         log_lead=np.log1p(df.lead_time), **{c: df[c].astype("category") for c in cats})
     prev = df.previous_cancellations + df.previous_bookings_not_canceled
     return {"df": df, "X": X, "y": 1 - df.is_canceled, "shows": df.previous_bookings_not_canceled, "visits": prev,
-            "people": pd.Series(df.index), "strata": pd.cut(prev, *STRATA), "date": "arrival_date"}
+            "people": pd.Series(df.index), "strata": pd.cut(prev, STRATA[0], labels=STRATA[1]), "date": "arrival_date"}
 
 
 def noshow_design(df):

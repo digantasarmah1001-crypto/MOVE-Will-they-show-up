@@ -19,3 +19,9 @@ def test_row_order_does_not_matter():
     a = add_history(df).set_index("appointment_id").sort_index()
     b = add_history(df.sample(frac=1, random_state=0)).set_index("appointment_id").sort_index()
     pd.testing.assert_frame_equal(a, b)
+
+
+def test_strata_have_readable_labels():
+    from thesis.data.datasets import STRATA
+    s = pd.cut(pd.Series([0, 1, 2, 5]), STRATA[0], labels=STRATA[1])
+    assert list(s.astype(str)) == ["0", "1-2", "1-2", "3+"]
